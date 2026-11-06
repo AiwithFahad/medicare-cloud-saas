@@ -220,7 +220,7 @@ include __DIR__ . '/../includes/header.php';
           </select><small class="text-muted">Patients with an active admission are not listed.</small></div>
         <div class="mb-3"><label class="form-label">Free bed *</label>
           <select class="form-select" name="bed_id" required><option value="">Select a free bed…</option>
-            <?php foreach ($freeBeds as $b): ?><option value="<?= (int)$b['id'] ?>"><?= e($b['ward_name']) ?> — Bed <?= e($b['bed_number']) ?></option><?php endforeach; ?>
+            <?php foreach ($freeBeds as $fb): ?><option value="<?= (int)$fb['id'] ?>"><?= e($fb['ward_name']) ?> — Bed <?= e($fb['bed_number']) ?></option><?php endforeach; ?>
           </select></div>
         <div class="mb-3"><label class="form-label">Attending doctor</label>
           <select class="form-select" name="doctor_id"><option value="">— None —</option>

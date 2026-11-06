@@ -107,7 +107,7 @@ include __DIR__ . '/../includes/header.php';
       <div class="table-responsive"><table class="table table-sm"><thead><tr><th>Invoice</th><th>Date</th><th class="text-end">Total</th><th class="text-end">Paid</th><th class="text-end">Balance</th><th>Status</th></tr></thead>
       <tbody>
       <?php if (!$bills): ?><tr><td colspan="6" class="text-muted text-center py-3">No bills yet — you're all clear.</td></tr><?php endif; ?>
-      <?php foreach ($bills as $b): ?><tr><td><?= e($b['invoice_no']) ?></td><td><?= fmt_date($b['created_at']) ?></td><td class="text-end"><?= money($b['total']) ?></td><td class="text-end"><?= money($b['amount_paid']) ?></td><td class="text-end fw-semibold"><?= money((float)$b['total'] - (float)$b['amount_paid']) ?></td><td><?= status_badge((string)$b['status']) ?></td></tr><?php endforeach; ?>
+      <?php foreach ($bills as $bill): ?><tr><td><?= e($bill['invoice_no']) ?></td><td><?= fmt_date($bill['created_at']) ?></td><td class="text-end"><?= money($bill['total']) ?></td><td class="text-end"><?= money($bill['amount_paid']) ?></td><td class="text-end fw-semibold"><?= money((float)$bill['total'] - (float)$bill['amount_paid']) ?></td><td><?= status_badge((string)$bill['status']) ?></td></tr><?php endforeach; ?>
       </tbody></table></div>
       <?php if ($outstanding > 0): ?><div class="card-body small text-muted pt-2">You have an outstanding balance of <strong><?= money($outstanding) ?></strong>. Please settle it at the hospital cashier or ask reception about payment options.</div><?php endif; ?>
     </div>

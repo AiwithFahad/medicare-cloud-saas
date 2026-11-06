@@ -147,7 +147,7 @@ try {
     /* Revenue analytics — patient payments per month over the requested window. */
     $from = preg_match('/^\d{4}-\d{2}-\d{2}$/', (string)($_GET['from'] ?? '')) ? (string)$_GET['from'] : date('Y-m-01', strtotime('-5 months'));
     $to = preg_match('/^\d{4}-\d{2}-\d{2}$/', (string)($_GET['to'] ?? '')) ? (string)$_GET['to'] : date('Y-m-d');
-    $s = $pdo->prepare("SELECT DATE_FORMAT(paid_at, '%Y-%m') AS ym, COALESCE(SUM(amount),0) AS total FROM patient_payments WHERE tenant_id = ? AND paid_at BETWEEN ? AND ? GROUP BY ym");
+    $s = $pdo->prepare("SELECT DATE_FORMAT(paid_at, '%Y-%m') AS ym, COALESCE(SUM(amount),0) AS total FROM patient_payments WHERE tenant_id = ? AND paid_at >= ? AND paid_at < DATE_ADD(?, INTERVAL 1 DAY) GROUP BY ym");
     $s->execute([$tenantId, $from, $to]);
     $revMap = [];
     foreach ($s->fetchAll() as $r) {

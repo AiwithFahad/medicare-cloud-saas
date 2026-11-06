@@ -240,3 +240,90 @@ All demo JavaScript parses cleanly (validated with Node).
 6. Reminder *delivery* (SMS/email) is out of scope: reminders are
    created automatically and worked from the dashboards (mark done);
    channels are recorded for a future gateway integration.
+
+## 9. Runtime verification (post-upgrade, live database)
+
+_Added after the §7 smoke test. §7's "no MySQL/MariaDB on this VM" note is
+superseded: MariaDB 10.11.14 was installed on the VM for this round, and
+the app was exercised end-to-end over HTTP against a real database._
+
+**Environment & setup**
+
+- MariaDB 10.11.14 + static PHP 8.5.8 (`pdo_mysql`), PHP built-in server
+  on `127.0.0.1:8101`, `display_errors=1`, `error_reporting=E_ALL`.
+- Fresh import of `database.sql` into a scratch database (import copy
+  only renamed the DB): **43 tables, 9 users, 8 patients** seeded, zero
+  import errors. Credentials were passed to the server process as
+  environment variables — no `.env` file was created in the tree.
+- Tests used curl cookie jars per role and asserted **page content**
+  (expected strings, absence of PHP error text), not just status codes.
+  Scratch DB, test DB user and the test server were removed afterwards.
+
+**Flows tested — all passed**
+
+- Public pages: `/`, about, features, pricing, doctors, departments,
+  blog, contact, privacy, terms, book-appointment, login/register —
+  200 with real content, no PHP errors.
+- **Logins** for all five demo roles land on the correct new trees:
+  super → `super-admin/dashboard.php`, hospital admin →
+  `admin/dashboard.php`, doctor → `doctor/dashboard.php`, receptionist →
+  `receptionist/dashboard.php`, patient → `patient/dashboard.php`.
+- **Every page of every role tree** (super-admin 13, admin 12, doctor 6,
+  receptionist 4, patient 6) plus all 16 legacy `app/` pages render 200
+  with real seeded data (e.g. "City Care Hospital" in Super Admin,
+  `PAT-0001` / "John Miller" in the patient portal) and a **clean PHP
+  error log**.
+- **Role isolation:** patient → admin/super-admin trees = 403,
+  doctor → admin/super-admin = 403, hospital admin → super-admin = 403,
+  receptionist → admin billing = 403, super admin → patient tree = 403,
+  anonymous → 302 to login; API permission gates return JSON 403
+  (e.g. patient calling `api/wards.php`). Logout destroys the session.
+- **`api/dashboard-stats.php`** (admin): `total_patients 8`,
+  `total_doctors 6`, `appointments_today 4`, `beds_total 12`,
+  `beds_available 6` — all match direct SQL counts. Platform scope
+  (super admin): `total_tenants 3`, `total_users 9`, MRR/plan charts OK.
+- **`api/doctor-availability.php`**: doctor 1 on a working Monday returns
+  all 10 slots (09:00–13:30); on Saturday returns `available: false`
+  with a reason; past slots on the current day are correctly filtered.
+- **`api/wards.php`** GET returns the live bed board (12 beds, patient
+  names/codes); POST `bed_status` occupied→available round-trip verified
+  in the database and restored.
+- **`api/search.php`**: `q=sarah` finds Dr. Sarah Khan (tenant view);
+  super-admin view returns tenant counts (3 total).
+- **`api/patients.php`**: search finds John Miller (`PAT-0001`); create
+  registers a new patient (`PAT-0009`); update persists name/phone —
+  both verified in the database.
+- **`api/appointments.php`**: booking patient 9 with doctor 1 on
+  2026-11-09 09:00 succeeded (fee defaulted to the doctor's $80
+  consultation fee), created the front-desk reminder (1 h before), the
+  slot disappeared from availability, and re-booking the same slot was
+  rejected with 422 "That slot was just taken."
+- **`api/notifications.php`** returns the seeded tenant notifications.
+- Re-lint after fixes: **100 PHP files, 0 failures**; `node --check`
+  passes on `assets/js/app.js`.
+
+**Bugs found & fixed during runtime verification**
+
+1. `api/dashboard-stats.php` — revenue chart always showed **$0 for the
+   current month**: `paid_at BETWEEN ? AND ?` compared a DATETIME column
+   against a date-only end bound, excluding every payment made on the
+   end date. Fixed to `paid_at >= ? AND paid_at < DATE_ADD(?, INTERVAL 1
+   DAY)`; chart now reports the real $730 for the current month.
+2. `includes/footer.php` "Array to string conversion" warning, and
+   **app.js never loaded** on four pages: bed/bill `foreach` loops
+   reused `$b`, the variable `includes/header.php` sets to the base-path
+   string, so the footer printed `Arrayassets/js/app.js`. Loop variables
+   renamed in `admin/wards.php` ($b → $fb), `app/wards.php` ($b → $bed),
+   `app/admissions.php` ($b → $fb) and `app/portal.php` ($b → $bill);
+   all four pages now emit `../assets/js/app.js` with a clean error log.
+
+**Files changed by this verification round (exact list)**
+
+- `api/dashboard-stats.php`
+- `admin/wards.php`
+- `app/wards.php`
+- `app/admissions.php`
+- `app/portal.php`
+- `UPGRADE-SUMMARY.md` (this section)
+
+No design/branding changes; no other files were modified.

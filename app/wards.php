@@ -97,17 +97,17 @@ $pageTitle='Wards & Beds'; $base='../'; include __DIR__.'/../includes/header.php
 </div><div class="card-body">
   <?php if (!$beds): ?><div class="empty-state"><img src="../assets/img/empty.svg" alt=""><p>No beds in this ward yet.</p></div>
   <?php else: ?><div class="bed-grid">
-    <?php foreach($beds as $b): ?><div class="bed-tile bed-<?= e((string)$b['status']) ?>">
-      <i class="bi bi-hospital"></i><strong><?= e((string)$b['bed_number']) ?></strong>
-      <div><?= status_badge((string)$b['status']) ?></div>
-      <?php if (!empty($b['patient_name'])): ?><div class="small text-muted mt-1"><?= e((string)$b['patient_name']) ?></div><?php endif; ?>
+    <?php foreach($beds as $bed): ?><div class="bed-tile bed-<?= e((string)$bed['status']) ?>">
+      <i class="bi bi-hospital"></i><strong><?= e((string)$bed['bed_number']) ?></strong>
+      <div><?= status_badge((string)$bed['status']) ?></div>
+      <?php if (!empty($bed['patient_name'])): ?><div class="small text-muted mt-1"><?= e((string)$bed['patient_name']) ?></div><?php endif; ?>
       <form method="post" class="mt-2">
-        <?= csrf_field() ?><input type="hidden" name="action" value="bed_status"><input type="hidden" name="bed_id" value="<?= (int)$b['id'] ?>">
-        <select name="status" class="form-select form-select-sm mb-1 bed-status-sel"><?php foreach($bedStatuses as $st): ?><option value="<?= $st ?>" <?= $b['status']===$st?'selected':'' ?>><?= ucfirst($st) ?></option><?php endforeach; ?></select>
-        <select name="patient_id" class="form-select form-select-sm mb-1"><option value="0">— Patient (if occupied) —</option><?php foreach($patients as $p): ?><option value="<?= (int)$p['id'] ?>" <?= (($b['current_patient_id'] ?? null)==$p['id'])?'selected':'' ?>><?= e((string)$p['name']) ?> (<?= e((string)$p['patient_code']) ?>)</option><?php endforeach; ?></select>
+        <?= csrf_field() ?><input type="hidden" name="action" value="bed_status"><input type="hidden" name="bed_id" value="<?= (int)$bed['id'] ?>">
+        <select name="status" class="form-select form-select-sm mb-1 bed-status-sel"><?php foreach($bedStatuses as $st): ?><option value="<?= $st ?>" <?= $bed['status']===$st?'selected':'' ?>><?= ucfirst($st) ?></option><?php endforeach; ?></select>
+        <select name="patient_id" class="form-select form-select-sm mb-1"><option value="0">— Patient (if occupied) —</option><?php foreach($patients as $p): ?><option value="<?= (int)$p['id'] ?>" <?= (($bed['current_patient_id'] ?? null)==$p['id'])?'selected':'' ?>><?= e((string)$p['name']) ?> (<?= e((string)$p['patient_code']) ?>)</option><?php endforeach; ?></select>
         <button class="btn btn-sm btn-primary w-100">Update</button>
       </form>
-      <?php if ($canManage): ?><form method="post" class="mt-1" data-confirm="Delete this bed?"><?= csrf_field() ?><input type="hidden" name="action" value="bed_delete"><input type="hidden" name="bed_id" value="<?= (int)$b['id'] ?>"><button class="btn btn-sm btn-outline-danger w-100">Remove Bed</button></form><?php endif; ?>
+      <?php if ($canManage): ?><form method="post" class="mt-1" data-confirm="Delete this bed?"><?= csrf_field() ?><input type="hidden" name="action" value="bed_delete"><input type="hidden" name="bed_id" value="<?= (int)$bed['id'] ?>"><button class="btn btn-sm btn-outline-danger w-100">Remove Bed</button></form><?php endif; ?>
     </div><?php endforeach; ?>
   </div><?php endif; ?>
   <?php if ($canManage): ?><form method="post" class="row g-2 mt-3 align-items-end"><?= csrf_field() ?><input type="hidden" name="action" value="bed_add"><input type="hidden" name="ward_id" value="<?= (int)$w['id'] ?>"><div class="col-md-4"><label class="form-label small">New Bed Number</label><input class="form-control" name="bed_number" required placeholder="e.g. A-05"></div><div class="col-md-3"><button class="btn btn-outline-primary w-100"><i class="bi bi-plus-lg"></i> Add Bed</button></div></form><?php endif; ?>
