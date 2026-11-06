@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MediCare Cloud — Hospital Management SaaS</title>
+<meta name="description" content="MediCare Cloud — hospital management, beautifully simple. Patients, doctors, appointments, wards, pharmacy, lab & billing in one multi-tenant SaaS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+:root{
+  --blue:#2563eb; --blue-dark:#1d4ed8; --blue-soft:#eff6ff;
+  --green:#10b981; --green-dark:#059669; --green-soft:#ecfdf5;
+  --teal:#0d9488; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+  --bg:#f4f8fc; --radius:14px; --shadow:0 6px 24px rgba(37,99,235,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:#fff;margin:0}
+h1,h2,h3,h4,h5{font-weight:700;letter-spacing:-.01em}
+.text-blue{color:var(--blue)} .text-green{color:var(--green-dark)}
+.btn-primary{background:var(--blue);border-color:var(--blue)}
+.btn-primary:hover{background:var(--blue-dark);border-color:var(--blue-dark)}
+.btn-success{background:var(--green);border-color:var(--green)}
+.btn-success:hover{background:var(--green-dark);border-color:var(--green-dark)}
+
+/* ---------- Navbar ---------- */
+.site-nav{background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid #e2e8f0}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:800;font-size:1.15rem;text-decoration:none}
+.brand-mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--blue),var(--teal));color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:1.15rem;flex:none}
+.brand em{font-style:normal;color:var(--green)}
+.site-nav .nav-link{font-weight:600;color:#334155}
+.site-nav .nav-link:hover{color:var(--blue)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;padding:84px 0 70px;background:linear-gradient(180deg,#eff6ff 0%,#f0fdf9 55%,#ffffff 100%);overflow:hidden}
+.hero h1{font-size:clamp(2.1rem,4.5vw,3.4rem);font-weight:900;line-height:1.08}
+.hero h1 .grad{background:linear-gradient(90deg,var(--blue),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{color:#475569}
+.pill{display:inline-flex;gap:8px;align-items:center;background:#fff;border:1px solid #bfdbfe;color:var(--blue-dark);font-weight:700;font-size:.8rem;border-radius:999px;padding:.35rem .8rem}
+.dash-preview{background:#fff;border:1px solid #e2e8f0;border-radius:20px;box-shadow:0 30px 60px rgba(37,99,235,.16);padding:18px}
+.dash-preview .bar{height:10px;border-radius:99px;background:#eef2f7}
+.mini-stat{border:1px solid #eef2f7;border-radius:12px;padding:10px 12px;background:#fbfdff}
+.mini-stat .num{font-weight:800;font-size:1.15rem}
+.mini-stat .lbl{color:var(--muted);font-size:.75rem;font-weight:600}
+.logo-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #e2e8f0;border-radius:12px;padding:.65rem 1.1rem;font-weight:800;color:#64748b;background:#fff}
+.logo-chip i{color:var(--blue)}
+
+/* ---------- Sections ---------- */
+.section{padding:76px 0}
+.section-alt{background:#f8fafc}
+.kicker{color:var(--green-dark);font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:.75rem}
+.feature-card{border:1px solid #e2e8f0;border-radius:16px;padding:26px;height:100%;background:#fff;transition:.2s}
+.feature-card:hover{transform:translateY(-4px);box-shadow:0 18px 36px rgba(15,23,42,.08)}
+.feature-card .fic{width:52px;height:52px;border-radius:14px;background:var(--blue-soft);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:14px}
+.feature-card.g .fic{background:var(--green-soft);color:var(--green-dark)}
+.stats-band{background:linear-gradient(120deg,var(--blue-dark),var(--teal));border-radius:22px;color:#fff;padding:44px 34px}
+.stats-band .num{font-size:2.2rem;font-weight:900;line-height:1}
+.stats-band .lbl{opacity:.85;font-size:.88rem;font-weight:600}
+.doctor-card{border:1px solid #e2e8f0;border-radius:16px;background:#fff;height:100%;padding:22px;transition:.2s}
+.doctor-card:hover{transform:translateY(-4px);box-shadow:0 18px 36px rgba(15,23,42,.08)}
+.avatar-lg{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.35rem;margin-bottom:12px}
+.avatar-lg.alt{background:linear-gradient(135deg,var(--teal),var(--blue))}
+.avatar-sm{width:34px;height:34px;border-radius:50%;background:var(--blue-soft);color:var(--blue);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex:none}
+.dept-tile{border-radius:16px;padding:24px;color:#fff;height:100%;min-height:160px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(135deg,var(--blue),#3b82f6)}
+.dept-tile.g{background:linear-gradient(135deg,var(--green-dark),var(--teal))}
+.dept-tile.d{background:linear-gradient(135deg,#0f172a,#334155)}
+.dept-tile i{font-size:1.9rem;margin-bottom:auto}
+.dept-tile .count{opacity:.85;font-size:.85rem;font-weight:600}
+.price-card{border:1.5px solid #e2e8f0;border-radius:18px;padding:28px;height:100%;background:#fff;display:flex;flex-direction:column}
+.price-card.popular{border-color:var(--blue);box-shadow:0 24px 48px rgba(37,99,235,.14);position:relative}
+.price-card .amount{font-size:2.3rem;font-weight:900}
+.price-card ul{list-style:none;padding:0;margin:0 0 18px}
+.price-card ul li{margin-bottom:.45rem;font-size:.93rem}
+.price-card ul li i{color:var(--green-dark);margin-right:.4rem}
+.pop-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-size:.72rem;font-weight:800;border-radius:999px;padding:.25rem .8rem;letter-spacing:.05em}
+.testi{border:1px solid #e2e8f0;border-radius:16px;padding:26px;background:#fff;height:100%}
+.testi .stars{color:#f59e0b}
+.accordion-item{border-color:#e2e8f0}
+.cta-band{background:linear-gradient(120deg,var(--blue-dark),var(--teal));border-radius:22px;color:#fff;padding:44px}
+.site-footer{background:#0b1526;color:#cbd5e1;padding:60px 0 28px}
+.site-footer h6{color:#fff;margin-bottom:14px}
+.site-footer a{display:block;color:#94a3b8;margin-bottom:8px;font-size:.93rem;text-decoration:none}
+.site-footer a:hover{color:#fff}
+.demo-badge{font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:#fef3c7;color:#92400e;border-radius:999px;padding:.25rem .65rem}
+
+/* ---------- Live demo shell ---------- */
+.demo-shell{--d-bg:#f4f8fc;--d-surface:#ffffff;--d-surface2:#f8fafc;--d-ink:#0f172a;--d-muted:#64748b;--d-line:#e2e8f0;--d-sidebar:#ffffff;--d-sidebar-ink:#334155;
+  background:var(--d-bg);border:1px solid #dbe5f1;border-radius:20px;overflow:hidden;box-shadow:0 30px 60px rgba(37,99,235,.14);text-align:left}
+.demo-shell[data-theme="dark"]{--d-bg:#0b1220;--d-surface:#111c30;--d-surface2:#0f1930;--d-ink:#e2e8f0;--d-muted:#94a3b8;--d-line:#1e293b;--d-sidebar:#0e1830;--d-sidebar-ink:#cbd5e1}
+.demo-layout{display:flex;min-height:640px;position:relative}
+.demo-sidebar{width:248px;flex:none;background:var(--d-sidebar);border-right:1px solid var(--d-line);padding:16px 12px;display:flex;flex-direction:column;transition:margin .25s ease,transform .25s ease;z-index:20}
+.demo-shell.sb-collapsed .demo-sidebar{width:74px}
+.demo-shell.sb-collapsed .demo-sidebar .lbl,.demo-shell.sb-collapsed .demo-sidebar .side-heading,.demo-shell.sb-collapsed .demo-sidebar .brand-text{display:none}
+.demo-shell.sb-collapsed .demo-side-link{justify-content:center}
+.demo-side-link{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:9px 11px;border:0;border-radius:10px;background:transparent;color:var(--d-sidebar-ink);font-weight:500;font-size:.93rem;margin-bottom:2px;cursor:pointer;white-space:nowrap}
+.demo-side-link i{font-size:1.05rem;width:20px;text-align:center;flex:none}
+.demo-side-link:hover{background:var(--blue-soft);color:var(--blue)}
+.demo-shell[data-theme="dark"] .demo-side-link:hover{background:#12294d}
+.demo-side-link.active{background:linear-gradient(90deg,var(--blue),#3b82f6);color:#fff}
+.demo-main{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--d-bg);color:var(--d-ink)}
+.demo-topbar{height:60px;background:var(--d-surface);border-bottom:1px solid var(--d-line);display:flex;align-items:center;gap:10px;padding:0 16px;position:sticky;top:0;z-index:10}
+.demo-topbar h5{margin:0;font-size:1.02rem}
+.icon-btn{width:38px;height:38px;border:1px solid var(--d-line);background:var(--d-surface);color:var(--d-ink);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:1rem;flex:none;position:relative}
+.icon-btn:hover{border-color:var(--blue);color:var(--blue)}
+.icon-btn .dot{position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:50%;background:#ef4444}
+.demo-body{padding:20px;flex:1}
+.demo-card{background:var(--d-surface);border:1px solid var(--d-line);border-radius:var(--radius);padding:18px;height:100%}
+.demo-card h6{font-weight:700}
+.stat-card{display:flex;gap:14px;align-items:center}
+.stat-ic{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex:none}
+.ic-blue{background:var(--blue-soft);color:var(--blue)} .ic-green{background:var(--green-soft);color:var(--green-dark)}
+.ic-amber{background:#fef3c7;color:#d97706} .ic-rose{background:#ffe4e6;color:#e11d48} .ic-violet{background:#ede9fe;color:#7c3aed} .ic-teal{background:#ccfbf1;color:var(--teal)}
+.demo-shell[data-theme="dark"] .ic-blue{background:#12294d} .demo-shell[data-theme="dark"] .ic-green{background:#0b2e25}
+.stat-card .num{font-size:1.45rem;font-weight:800;line-height:1.1}
+.stat-card .lbl2{color:var(--d-muted);font-size:.8rem;font-weight:600}
+.demo-shell .table{--bs-table-bg:transparent;--bs-table-color:var(--d-ink);--bs-table-border-color:var(--d-line);margin-bottom:0;font-size:.9rem}
+.demo-shell .table thead th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--d-muted)}
+.bed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:10px}
+.bed-tile{border:1.5px solid var(--d-line);border-radius:12px;padding:11px 6px;text-align:center;background:var(--d-surface);font-size:.82rem;font-weight:700}
+.bed-tile i{font-size:1.35rem;display:block;margin-bottom:3px}
+.bed-tile small{display:block;font-weight:600;color:var(--d-muted);font-size:.7rem}
+.bed-available{border-color:#a7f3d0;background:var(--green-soft)} .bed-occupied{border-color:#fecdd3;background:#fff1f2}
+.bed-reserved{border-color:#fde68a;background:#fffbeb} .bed-maintenance{opacity:.6}
+.demo-shell[data-theme="dark"] .bed-occupied{background:#2b1220} .demo-shell[data-theme="dark"] .bed-reserved{background:#2b2110} .demo-shell[data-theme="dark"] .bed-available{background:#0b2e25}
+.demo-view{display:none} .demo-view.active{display:block}
+.demo-backdrop{display:none}
+.search-mock{display:flex;align-items:center;gap:8px;background:var(--d-surface2);border:1px solid var(--d-line);border-radius:10px;padding:0 12px;height:38px;color:var(--d-muted);font-size:.88rem;min-width:180px}
+.progress{height:8px;border-radius:99px;background:var(--d-surface2)}
+@media (max-width:991px){
+  .demo-sidebar{position:absolute;inset:0 auto 0 0;transform:translateX(-105%);box-shadow:0 20px 40px rgba(2,6,23,.25)}
+  .demo-shell.sb-open .demo-sidebar{transform:translateX(0)}
+  .demo-shell.sb-collapsed .demo-sidebar{width:248px}
+  .demo-shell.sb-collapsed .demo-sidebar .lbl,.demo-shell.sb-collapsed .demo-sidebar .side-heading,.demo-shell.sb-collapsed .demo-sidebar .brand-text{display:inline}
+  .demo-shell.sb-open .demo-backdrop{display:block;position:absolute;inset:0;background:rgba(2,6,23,.45);z-index:15}
+  .search-mock{display:none}
+  .demo-body{padding:14px}
+}
+@media (max-width:575px){ .stat-card .num{font-size:1.2rem} .section{padding:56px 0} }
+</style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg site-nav sticky-top">
+  <div class="container">
+    <a class="brand" href="#top"><span class="brand-mark"><i class="bi bi-heart-pulse-fill"></i></span><span>MediCare <em>Cloud</em></span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+        <li class="nav-item"><a class="nav-link" href="#doctors">Doctors</a></li>
+        <li class="nav-item"><a class="nav-link" href="#demo">Demo</a></li>
+        <li class="nav-item ms-lg-3"><a class="btn btn-primary px-4" href="#demo"><i class="bi bi-box-arrow-in-right me-1"></i>Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span class="pill"><i class="bi bi-stars"></i> Multi-tenant Hospital Management SaaS</span>
+        <h1 class="mt-3">Hospital management, <span class="grad">beautifully simple</span></h1>
+        <p class="lead fs-5 mt-3">Patients, doctors, appointments, wards, pharmacy, laboratory and billing — one calm, cloud workspace for your whole hospital. No spreadsheets. No chaos. Just care, organised.</p>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <a href="#demo" class="btn btn-primary btn-lg px-4"><i class="bi bi-play-circle me-1"></i>Try the live demo</a>
+          <a href="#pricing" class="btn btn-outline-primary btn-lg px-4">See pricing</a>
+        </div>
+        <div class="d-flex flex-wrap gap-4 mt-4 text-secondary small fw-semibold">
+          <span><i class="bi bi-check-circle-fill text-green me-1"></i>14-day free trial</span>
+          <span><i class="bi bi-check-circle-fill text-green me-1"></i>No card required</span>
+          <span><i class="bi bi-check-circle-fill text-green me-1"></i>Cancel anytime</span>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="dash-preview" aria-hidden="true">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <strong><i class="bi bi-heart-pulse-fill text-blue me-1"></i>City Care Hospital</strong>
+            <span class="badge text-bg-success">Live overview</span>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-3"><div class="mini-stat"><div class="num">1,284</div><div class="lbl">Patients</div></div></div>
+            <div class="col-3"><div class="mini-stat"><div class="num">48</div><div class="lbl">Appts today</div></div></div>
+            <div class="col-3"><div class="mini-stat"><div class="num">68%</div><div class="lbl">Beds occupied</div></div></div>
+            <div class="col-3"><div class="mini-stat"><div class="num">$8.4k</div><div class="lbl">Revenue today</div></div></div>
+          </div>
+          <div class="bar mb-2" style="width:92%"></div><div class="bar mb-2" style="width:74%"></div><div class="bar mb-2" style="width:83%"></div><div class="bar" style="width:58%"></div>
+          <div class="d-flex gap-2 mt-3 flex-wrap">
+            <span class="badge rounded-pill text-bg-primary">Cardiology · 12 appts</span>
+            <span class="badge rounded-pill text-bg-success">ICU · 1 bed free</span>
+            <span class="badge rounded-pill text-bg-warning">Lab · 3 pending</span>
+          </div>
+        </div>
+        <p class="text-center text-muted small mt-2 mb-0">Preview uses demo data from City Care Hospital.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= TRUSTED BY ================= -->
+<section class="py-4 border-bottom">
+  <div class="container text-center">
+    <p class="text-muted fw-bold text-uppercase small mb-3" style="letter-spacing:.12em">Trusted by care teams at</p>
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+      <span class="logo-chip"><i class="bi bi-hospital"></i>City Care Hospital</span>
+      <span class="logo-chip"><i class="bi bi-heart-pulse"></i>Riverside Medical Center</span>
+      <span class="logo-chip"><i class="bi bi-balloon-heart"></i>Sunrise Children Clinic</span>
+      <span class="logo-chip"><i class="bi bi-building"></i>Northgate General</span>
+      <span class="logo-chip"><i class="bi bi-clipboard2-pulse"></i>Valley Health</span>
+      <span class="logo-chip"><i class="bi bi-plus-square"></i>St. Mary&rsquo;s Hospital</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="text-center mx-auto mb-5" style="max-width:680px">
+      <span class="kicker">Everything in one place</span>
+      <h2 class="mt-2">Every department. One login.</h2>
+      <p class="text-secondary">Nine connected modules share the same patient record, so reception, doctors, pharmacy, lab and accounts always see the same truth.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4"><div class="feature-card"><div class="fic"><i class="bi bi-people"></i></div><h5>Patient Management</h5><p class="text-secondary mb-0">Registration with patient codes, blood group, allergies and emergency contacts — searchable in seconds from anywhere in the hospital.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card g"><div class="fic"><i class="bi bi-calendar2-check"></i></div><h5>Appointments &amp; Scheduling</h5><p class="text-secondary mb-0">OPD, follow-up, emergency and teleconsult booking with a clear status flow from scheduled to completed — no double bookings.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card"><div class="fic"><i class="bi bi-person-badge"></i></div><h5>Doctors &amp; Departments</h5><p class="text-secondary mb-0">Specializations, qualifications, consultation fees and weekly schedules for every doctor, organised by department.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card g"><div class="fic"><i class="bi bi-hospital"></i></div><h5>Wards &amp; Bed Management</h5><p class="text-secondary mb-0">A live bed board across General, ICU and Private wards — available, occupied, reserved and maintenance at a glance.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card"><div class="fic"><i class="bi bi-capsule"></i></div><h5>Pharmacy &amp; Prescriptions</h5><p class="text-secondary mb-0">Medicine stock with reorder alerts and expiry tracking, plus prescriptions that flow straight from the doctor to dispensing.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card g"><div class="fic"><i class="bi bi-droplet-half"></i></div><h5>Laboratory</h5><p class="text-secondary mb-0">Test catalogue with normal ranges, ordered results and a technician workflow from pending to completed reports.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card"><div class="fic"><i class="bi bi-receipt"></i></div><h5>Billing &amp; Invoicing</h5><p class="text-secondary mb-0">Itemised patient invoices — consultation, lab, pharmacy, bed and procedure charges — with partial payments handled cleanly.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card g"><div class="fic"><i class="bi bi-graph-up-arrow"></i></div><h5>Reports &amp; Analytics</h5><p class="text-secondary mb-0">Patient flow, department load, bed occupancy and revenue trends, charted automatically from live operational data.</p></div></div>
+      <div class="col-md-6 col-lg-4"><div class="feature-card"><div class="fic"><i class="bi bi-shield-lock"></i></div><h5>Multi-tenant SaaS &amp; Roles</h5><p class="text-secondary mb-0">Each hospital is fully isolated, with 9 role-based logins — from Super Admin to the patient portal — and subscriptions built in.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<section class="pb-5">
+  <div class="container">
+    <div class="stats-band">
+      <div class="row g-4 text-center">
+        <div class="col-6 col-lg-3"><div class="num"><span data-count="120">0</span>+</div><div class="lbl">Hospitals on MediCare Cloud</div></div>
+        <div class="col-6 col-lg-3"><div class="num"><span data-count="48">0</span>k</div><div class="lbl">Patients managed</div></div>
+        <div class="col-6 col-lg-3"><div class="num"><span data-count="1.2" data-decimals="1">0</span>M</div><div class="lbl">Appointments booked</div></div>
+        <div class="col-6 col-lg-3"><div class="num"><span data-count="99.9" data-decimals="1">0</span>%</div><div class="lbl">Uptime (Enterprise SLA)</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DOCTORS ================= -->
+<section class="section section-alt" id="doctors">
+  <div class="container">
+    <div class="text-center mx-auto mb-5" style="max-width:680px">
+      <span class="kicker">Meet the team</span>
+      <h2 class="mt-2">Doctors at City Care Hospital</h2>
+      <p class="text-secondary">Demo profiles from the seeded demo hospital — specializations, fees and schedules exactly as patients see them when booking.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4"><div class="doctor-card"><div class="avatar-lg">SK</div><h5 class="mb-1">Dr. Sarah Khan</h5><span class="badge text-bg-primary mb-2">Cardiology</span><p class="text-secondary small mb-2">Interventional Cardiology · MBBS, MD Cardiology</p><div class="small"><div><i class="bi bi-cash-coin text-green me-1"></i>Consultation fee: <strong>$80</strong></div><div><i class="bi bi-clock text-blue me-1"></i>Mon–Fri · 9:00 AM – 2:00 PM</div></div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="doctor-card"><div class="avatar-lg alt">JP</div><h5 class="mb-1">Dr. James Patel</h5><span class="badge text-bg-primary mb-2">Neurology</span><p class="text-secondary small mb-2">Neurology · MBBS, DM Neurology</p><div class="small"><div><i class="bi bi-cash-coin text-green me-1"></i>Consultation fee: <strong>$90</strong></div><div><i class="bi bi-clock text-blue me-1"></i>Mon, Wed, Fri · 10:00 AM – 4:00 PM</div></div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="doctor-card"><div class="avatar-lg">LK</div><h5 class="mb-1">Dr. Laura Kim</h5><span class="badge text-bg-success mb-2">Pediatrics</span><p class="text-secondary small mb-2">Pediatrics · MBBS, MD Pediatrics</p><div class="small"><div><i class="bi bi-cash-coin text-green me-1"></i>Consultation fee: <strong>$60</strong></div><div><i class="bi bi-clock text-blue me-1"></i>Mon–Sat · 9:00 AM – 1:00 PM</div></div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="doctor-card"><div class="avatar-lg alt">OF</div><h5 class="mb-1">Dr. Omar Farooq</h5><span class="badge text-bg-danger mb-2">Emergency</span><p class="text-secondary small mb-2">Emergency Medicine · MBBS, FCPS</p><div class="small"><div><i class="bi bi-cash-coin text-green me-1"></i>Consultation fee: <strong>$100</strong></div><div><i class="bi bi-clock text-blue me-1"></i>24/7 on-call rotation</div></div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="doctor-card"><div class="avatar-lg">NR</div><h5 class="mb-1">Dr. Nina Rodriguez</h5><span class="badge text-bg-primary mb-2">Orthopedics</span><p class="text-secondary small mb-2">Orthopedic Surgery · MBBS, MS Orthopedics</p><div class="small"><div><i class="bi bi-cash-coin text-green me-1"></i>Consultation fee: <strong>$85</strong></div><div><i class="bi bi-clock text-blue me-1"></i>Tue, Thu, Sat · 11:00 AM – 5:00 PM</div></div></div></div>
+      <div class="col-md-6 col-lg-4"><div class="doctor-card"><div class="avatar-lg alt">PN</div><h5 class="mb-1">Dr. Peter Novak</h5><span class="badge text-bg-dark mb-2">General Surgery</span><p class="text-secondary small mb-2">General Surgery · MBBS, MS Surgery</p><div class="small"><div><i class="bi bi-cash-coin text-green me-1"></i>Consultation fee: <strong>$95</strong></div><div><i class="bi bi-clock text-blue me-1"></i>Mon–Thu · 8:00 AM – 12:00 PM</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEPARTMENTS ================= -->
+<section class="section">
+  <div class="container">
+    <div class="text-center mx-auto mb-5" style="max-width:680px">
+      <span class="kicker">Departments</span>
+      <h2 class="mt-2">Six departments, one shared record</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4"><div class="dept-tile"><i class="bi bi-heart-pulse-fill"></i><h5>Cardiology</h5><span class="count">2nd Floor · Head: Dr. Sarah Khan</span></div></div>
+      <div class="col-md-6 col-lg-4"><div class="dept-tile g"><i class="bi bi-diagram-3-fill"></i><h5>Neurology</h5><span class="count">3rd Floor · Head: Dr. James Patel</span></div></div>
+      <div class="col-md-6 col-lg-4"><div class="dept-tile"><i class="bi bi-balloon-heart-fill"></i><h5>Pediatrics</h5><span class="count">1st Floor · Head: Dr. Laura Kim</span></div></div>
+      <div class="col-md-6 col-lg-4"><div class="dept-tile d"><i class="bi bi-siren-fill"></i><h5>Emergency</h5><span class="count">Ground Floor · 24/7 trauma care</span></div></div>
+      <div class="col-md-6 col-lg-4"><div class="dept-tile g"><i class="bi bi-bandaid-fill"></i><h5>Orthopedics</h5><span class="count">2nd Floor · Bones, joints &amp; sports injuries</span></div></div>
+      <div class="col-md-6 col-lg-4"><div class="dept-tile d"><i class="bi bi-scissors"></i><h5>General Surgery</h5><span class="count">4th Floor · Procedures &amp; recovery</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LIVE DEMO ================= -->
+<section class="section section-alt" id="demo">
+  <div class="container">
+    <div class="text-center mx-auto mb-4" style="max-width:720px">
+      <span class="kicker">Live app demo</span>
+      <h2 class="mt-2">This is the actual dashboard</h2>
+      <p class="text-secondary">A working mock of the City Care Hospital workspace. Click through the sidebar — every view below runs in your browser. <span class="demo-badge">Demo data</span></p>
+    </div>
+
+    <div class="demo-shell" id="demoShell">
+      <div class="demo-layout">
+        <div class="demo-backdrop" id="demoBackdrop"></div>
+        <!-- Sidebar -->
+        <aside class="demo-sidebar" id="demoSidebar">
+          <a class="brand mb-3" href="#demo" style="color:var(--d-ink)"><span class="brand-mark"><i class="bi bi-heart-pulse-fill"></i></span><span class="brand-text">MediCare <em>Cloud</em></span></a>
+          <div class="side-heading small text-uppercase fw-bold mb-2" style="color:var(--d-muted);letter-spacing:.12em;font-size:.68rem">Hospital</div>
+          <button class="demo-side-link active" data-view="overview"><i class="bi bi-grid-1x2-fill"></i><span class="lbl">Overview</span></button>
+          <button class="demo-side-link" data-view="patients"><i class="bi bi-people"></i><span class="lbl">Patients</span></button>
+          <button class="demo-side-link" data-view="doctors"><i class="bi bi-person-badge"></i><span class="lbl">Doctors</span></button>
+          <button class="demo-side-link" data-view="appointments"><i class="bi bi-calendar2-check"></i><span class="lbl">Appointments</span></button>
+          <button class="demo-side-link" data-view="wards"><i class="bi bi-hospital"></i><span class="lbl">Wards &amp; Beds</span></button>
+          <button class="demo-side-link" data-view="pharmacy"><i class="bi bi-capsule"></i><span class="lbl">Pharmacy</span></button>
+          <button class="demo-side-link" data-view="laboratory"><i class="bi bi-droplet-half"></i><span class="lbl">Laboratory</span></button>
+          <button class="demo-side-link" data-view="billing"><i class="bi bi-receipt"></i><span class="lbl">Billing</span></button>
+          <button class="demo-side-link" data-view="reports"><i class="bi bi-graph-up-arrow"></i><span class="lbl">Reports</span></button>
+          <div class="mt-auto pt-3" style="border-top:1px solid var(--d-line)">
+            <div class="d-flex align-items-center gap-2 px-1">
+              <span class="avatar-sm">AR</span>
+              <span class="lbl"><strong class="d-block small lh-1">Ayesha Rahman</strong><small style="color:var(--d-muted)">Hospital Admin</small></span>
+            </div>
+          </div>
+        </aside>
+        <!-- Main -->
+        <div class="demo-main">
+          <div class="demo-topbar">
+            <button class="icon-btn" id="demoBurger" type="button" aria-label="Toggle demo sidebar"><i class="bi bi-list"></i></button>
+            <h5 id="demoTitle">Overview</h5>
+            <span class="demo-badge d-none d-md-inline-block">Demo data</span>
+            <span class="ms-auto"></span>
+            <div class="search-mock"><i class="bi bi-search"></i><span>Search patients, doctors…</span></div>
+            <button class="icon-btn" type="button" aria-label="Notifications"><i class="bi bi-bell"></i><span class="dot"></span></button>
+            <button class="icon-btn" id="demoThemeToggle" type="button" aria-label="Toggle demo light and dark theme"><i class="bi bi-moon-stars"></i></button>
+            <span class="avatar-sm">AR</span>
+          </div>
+          <div class="demo-body">
+
+            <!-- OVERVIEW -->
+            <div class="demo-view active" data-view-panel="overview">
+              <div class="row g-3 mb-3">
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-blue"><i class="bi bi-people"></i></span><div><div class="num">1,284</div><div class="lbl2">Total Patients</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-green"><i class="bi bi-calendar2-check"></i></span><div><div class="num">48</div><div class="lbl2">Appointments Today</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-amber"><i class="bi bi-hospital"></i></span><div><div class="num">8 / 12</div><div class="lbl2">Beds Occupied</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-violet"><i class="bi bi-cash-stack"></i></span><div><div class="num">$8,420</div><div class="lbl2">Revenue Today</div></div></div></div>
+              </div>
+              <div class="row g-3 mb-3">
+                <div class="col-lg-8"><div class="demo-card"><h6>Patient visits — last 7 days</h6><div style="height:240px"><canvas id="visitsChart"></canvas></div></div></div>
+                <div class="col-lg-4"><div class="demo-card"><h6>Appointments by department</h6><div style="height:240px"><canvas id="deptChart"></canvas></div></div></div>
+              </div>
+              <div class="demo-card">
+                <h6 class="mb-3">Today&rsquo;s appointments</h6>
+                <div class="table-responsive"><table class="table table-hover align-middle">
+                  <thead><tr><th>Time</th><th>Patient</th><th>Doctor</th><th>Type</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr><td>09:30 AM</td><td>John Miller</td><td>Dr. Sarah Khan</td><td>OPD</td><td><span class="badge text-bg-success">Confirmed</span></td></tr>
+                    <tr><td>10:00 AM</td><td>Fatima Noor</td><td>Dr. Laura Kim</td><td>OPD</td><td><span class="badge text-bg-info">Scheduled</span></td></tr>
+                    <tr><td>11:00 AM</td><td>Mei Ling</td><td>Dr. James Patel</td><td>OPD</td><td><span class="badge text-bg-info">Scheduled</span></td></tr>
+                    <tr><td>12:30 PM</td><td>Sofia Rossi</td><td>Dr. Sarah Khan</td><td>Follow-up</td><td><span class="badge text-bg-secondary">Completed</span></td></tr>
+                  </tbody></table></div>
+              </div>
+            </div>
+
+            <!-- PATIENTS -->
+            <div class="demo-view" data-view-panel="patients">
+              <div class="demo-card">
+                <div class="d-flex justify-content-between align-items-center mb-3"><h6 class="mb-0">Patients <span class="text-muted fw-normal">(8 demo records)</span></h6><button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Add Patient</button></div>
+                <div class="table-responsive"><table class="table table-hover align-middle">
+                  <thead><tr><th>Code</th><th>Patient</th><th>Gender / Age</th><th>Blood</th><th>Phone</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr><td>PAT-0001</td><td><span class="avatar-sm me-2">JM</span>John Miller</td><td>Male · 38</td><td>O+</td><td>+1 555 010 9008</td><td><span class="badge text-bg-success">Active</span></td></tr>
+                    <tr><td>PAT-0002</td><td><span class="avatar-sm me-2">FN</span>Fatima Noor</td><td>Female · 31</td><td>A+</td><td>+1 555 012 3301</td><td><span class="badge text-bg-success">Active</span></td></tr>
+                    <tr><td>PAT-0003</td><td><span class="avatar-sm me-2">CD</span>Carlos Diaz</td><td>Male · 47</td><td>B−</td><td>+1 555 012 3303</td><td><span class="badge text-bg-primary">Admitted</span></td></tr>
+                    <tr><td>PAT-0004</td><td><span class="avatar-sm me-2">GA</span>Grace Adeyemi</td><td>Female · 10</td><td>AB+</td><td>+1 555 012 3305</td><td><span class="badge text-bg-success">Active</span></td></tr>
+                    <tr><td>PAT-0005</td><td><span class="avatar-sm me-2">HW</span>Henry Wilson</td><td>Male · 63</td><td>O−</td><td>+1 555 012 3307</td><td><span class="badge text-bg-primary">Admitted</span></td></tr>
+                    <tr><td>PAT-0006</td><td><span class="avatar-sm me-2">ML</span>Mei Ling</td><td>Female · 25</td><td>A−</td><td>+1 555 012 3309</td><td><span class="badge text-bg-success">Active</span></td></tr>
+                    <tr><td>PAT-0007</td><td><span class="avatar-sm me-2">AH</span>Ahmed Hassan</td><td>Male · 36</td><td>B+</td><td>+1 555 012 3311</td><td><span class="badge text-bg-primary">Admitted</span></td></tr>
+                    <tr><td>PAT-0008</td><td><span class="avatar-sm me-2">SR</span>Sofia Rossi</td><td>Female · 40</td><td>O+</td><td>+1 555 012 3313</td><td><span class="badge text-bg-success">Active</span></td></tr>
+                  </tbody></table></div>
+              </div>
+            </div>
+
+            <!-- DOCTORS -->
+            <div class="demo-view" data-view-panel="doctors">
+              <div class="demo-card">
+                <h6 class="mb-3">Doctors (6)</h6>
+                <div class="table-responsive"><table class="table table-hover align-middle">
+                  <thead><tr><th>Doctor</th><th>Department</th><th>Specialization</th><th>Fee</th><th>Schedule</th></tr></thead>
+                  <tbody>
+                    <tr><td><span class="avatar-sm me-2">SK</span>Dr. Sarah Khan</td><td>Cardiology</td><td>Interventional Cardiology</td><td>$80</td><td>Mon–Fri · 9 AM – 2 PM</td></tr>
+                    <tr><td><span class="avatar-sm me-2">JP</span>Dr. James Patel</td><td>Neurology</td><td>Neurology</td><td>$90</td><td>Mon, Wed, Fri · 10 AM – 4 PM</td></tr>
+                    <tr><td><span class="avatar-sm me-2">LK</span>Dr. Laura Kim</td><td>Pediatrics</td><td>Pediatrics</td><td>$60</td><td>Mon–Sat · 9 AM – 1 PM</td></tr>
+                    <tr><td><span class="avatar-sm me-2">OF</span>Dr. Omar Farooq</td><td>Emergency</td><td>Emergency Medicine</td><td>$100</td><td>24/7 on-call</td></tr>
+                    <tr><td><span class="avatar-sm me-2">NR</span>Dr. Nina Rodriguez</td><td>Orthopedics</td><td>Orthopedic Surgery</td><td>$85</td><td>Tue, Thu, Sat · 11 AM – 5 PM</td></tr>
+                    <tr><td><span class="avatar-sm me-2">PN</span>Dr. Peter Novak</td><td>General Surgery</td><td>General Surgery</td><td>$95</td><td>Mon–Thu · 8 AM – 12 PM</td></tr>
+                  </tbody></table></div>
+              </div>
+            </div>
+
+            <!-- APPOINTMENTS -->
+            <div class="demo-view" data-view-panel="appointments">
+              <div class="demo-card">
+                <div class="d-flex justify-content-between align-items-center mb-3"><h6 class="mb-0">Appointments</h6><button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Book Appointment</button></div>
+                <div class="table-responsive"><table class="table table-hover align-middle">
+                  <thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Doctor</th><th>Reason</th><th>Fee</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr><td>Today</td><td>09:30 AM</td><td>John Miller</td><td>Dr. Sarah Khan</td><td>Follow-up for blood pressure</td><td>$80</td><td><span class="badge text-bg-success">Confirmed</span></td></tr>
+                    <tr><td>Today</td><td>10:00 AM</td><td>Fatima Noor</td><td>Dr. Laura Kim</td><td>Child vaccination &amp; check-up</td><td>$60</td><td><span class="badge text-bg-info">Scheduled</span></td></tr>
+                    <tr><td>Today</td><td>11:00 AM</td><td>Mei Ling</td><td>Dr. James Patel</td><td>Recurring migraines — first consult</td><td>$90</td><td><span class="badge text-bg-info">Scheduled</span></td></tr>
+                    <tr><td>Today</td><td>12:30 PM</td><td>Sofia Rossi</td><td>Dr. Sarah Khan</td><td>ECG review</td><td>$80</td><td><span class="badge text-bg-secondary">Completed</span></td></tr>
+                    <tr><td>Tomorrow</td><td>09:00 AM</td><td>Grace Adeyemi</td><td>Dr. Laura Kim</td><td>Fever follow-up</td><td>$60</td><td><span class="badge text-bg-info">Scheduled</span></td></tr>
+                    <tr><td>Tomorrow</td><td>11:30 AM</td><td>Ahmed Hassan</td><td>Dr. Nina Rodriguez</td><td>Knee pain assessment</td><td>$85</td><td><span class="badge text-bg-success">Confirmed</span></td></tr>
+                    <tr><td>Yesterday</td><td>08:30 AM</td><td>Carlos Diaz</td><td>Dr. Peter Novak</td><td>Post-surgery wound review</td><td>$95</td><td><span class="badge text-bg-secondary">Completed</span></td></tr>
+                  </tbody></table></div>
+              </div>
+            </div>
+
+            <!-- WARDS & BEDS -->
+            <div class="demo-view" data-view-panel="wards">
+              <div class="row g-3">
+                <div class="col-12"><div class="demo-card"><h6>General Ward A <small style="color:var(--d-muted)">· 1st Floor</small></h6><div class="bed-grid">
+                  <div class="bed-tile bed-occupied"><i class="bi bi-hospital"></i>A-01<small>Carlos Diaz</small></div>
+                  <div class="bed-tile bed-occupied"><i class="bi bi-hospital"></i>A-02<small>Henry Wilson</small></div>
+                  <div class="bed-tile bed-available"><i class="bi bi-hospital"></i>A-03<small>Available</small></div>
+                  <div class="bed-tile bed-available"><i class="bi bi-hospital"></i>A-04<small>Available</small></div>
+                </div></div></div>
+                <div class="col-12"><div class="demo-card"><h6>ICU <small style="color:var(--d-muted)">· 3rd Floor</small></h6><div class="bed-grid">
+                  <div class="bed-tile bed-occupied"><i class="bi bi-heart-pulse"></i>ICU-01<small>Ahmed Hassan</small></div>
+                  <div class="bed-tile bed-available"><i class="bi bi-heart-pulse"></i>ICU-02<small>Available</small></div>
+                  <div class="bed-tile bed-reserved"><i class="bi bi-heart-pulse"></i>ICU-03<small>Reserved</small></div>
+                  <div class="bed-tile bed-maintenance"><i class="bi bi-heart-pulse"></i>ICU-04<small>Maintenance</small></div>
+                </div></div></div>
+                <div class="col-12"><div class="demo-card"><h6>Private Suites <small style="color:var(--d-muted)">· 5th Floor</small></h6><div class="bed-grid">
+                  <div class="bed-tile bed-available"><i class="bi bi-door-open"></i>P-01<small>Available</small></div>
+                  <div class="bed-tile bed-occupied"><i class="bi bi-door-open"></i>P-02<small>Fatima Noor</small></div>
+                  <div class="bed-tile bed-available"><i class="bi bi-door-open"></i>P-03<small>Available</small></div>
+                  <div class="bed-tile bed-available"><i class="bi bi-door-open"></i>P-04<small>Available</small></div>
+                </div></div></div>
+              </div>
+            </div>
+
+            <!-- PHARMACY -->
+            <div class="demo-view" data-view-panel="pharmacy">
+              <div class="demo-card">
+                <h6 class="mb-3">Medicine stock</h6>
+                <div class="table-responsive"><table class="table table-hover align-middle">
+                  <thead><tr><th>Medicine</th><th>Category</th><th>Stock</th><th>Price</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr><td>Paracetamol 500mg</td><td>Analgesic</td><td>480 tablets</td><td>$0.20</td><td><span class="badge text-bg-success">In stock</span></td></tr>
+                    <tr><td>Amoxicillin 250mg</td><td>Antibiotic</td><td>220 capsules</td><td>$0.55</td><td><span class="badge text-bg-success">In stock</span></td></tr>
+                    <tr><td>Atorvastatin 20mg</td><td>Cardiology</td><td>310 tablets</td><td>$0.80</td><td><span class="badge text-bg-success">In stock</span></td></tr>
+                    <tr><td>Salbutamol Inhaler</td><td>Respiratory</td><td>45 inhalers</td><td>$6.50</td><td><span class="badge text-bg-success">In stock</span></td></tr>
+                    <tr><td>Insulin Glargine</td><td>Antidiabetic</td><td>18 vials</td><td>$24.00</td><td><span class="badge text-bg-warning">Low stock</span></td></tr>
+                  </tbody></table></div>
+                <h6 class="mt-4 mb-2">Recent prescriptions</h6>
+                <p class="small mb-1"><span class="badge text-bg-warning me-2">Pending</span>John Miller — Atorvastatin 20mg, once daily, 30 days (Dr. Sarah Khan)</p>
+                <p class="small mb-0"><span class="badge text-bg-success me-2">Dispensed</span>Sofia Rossi — Paracetamol 500mg, twice daily, 14 days (Dr. Sarah Khan)</p>
+              </div>
+            </div>
+
+            <!-- LABORATORY -->
+            <div class="demo-view" data-view-panel="laboratory">
+              <div class="demo-card">
+                <h6 class="mb-3">Lab results</h6>
+                <div class="table-responsive"><table class="table table-hover align-middle">
+                  <thead><tr><th>Patient</th><th>Test</th><th>Result</th><th>Status</th><th>Remarks</th></tr></thead>
+                  <tbody>
+                    <tr><td>John Miller</td><td>Lipid Profile</td><td>186 mg/dL</td><td><span class="badge text-bg-success">Completed</span></td><td>Within acceptable range</td></tr>
+                    <tr><td>John Miller</td><td>HbA1c</td><td>5.9 %</td><td><span class="badge text-bg-success">Completed</span></td><td>Slightly above target — diet review</td></tr>
+                    <tr><td>Mei Ling</td><td>Complete Blood Count</td><td>—</td><td><span class="badge text-bg-warning">Pending</span></td><td>Fasting sample required</td></tr>
+                    <tr><td>Henry Wilson</td><td>ECG</td><td>—</td><td><span class="badge text-bg-info">In progress</span></td><td>Tracing under review</td></tr>
+                    <tr><td>Sofia Rossi</td><td>ECG</td><td>Normal sinus rhythm</td><td><span class="badge text-bg-success">Completed</span></td><td>No abnormalities detected</td></tr>
+                  </tbody></table></div>
+              </div>
+            </div>
+
+            <!-- BILLING -->
+            <div class="demo-view" data-view-panel="billing">
+              <div class="row g-3 mb-3">
+                <div class="col-6 col-xl-4"><div class="demo-card stat-card"><span class="stat-ic ic-green"><i class="bi bi-check2-circle"></i></span><div><div class="num">$730</div><div class="lbl2">Collected (demo bills)</div></div></div></div>
+                <div class="col-6 col-xl-4"><div class="demo-card stat-card"><span class="stat-ic ic-amber"><i class="bi bi-hourglass-split"></i></span><div><div class="num">$1,610</div><div class="lbl2">Outstanding</div></div></div></div>
+                <div class="col-12 col-xl-4"><div class="demo-card stat-card"><span class="stat-ic ic-rose"><i class="bi bi-receipt"></i></span><div><div class="num">4</div><div class="lbl2">Open invoices</div></div></div></div>
+              </div>
+              <div class="demo-card">
+                <h6 class="mb-3">Patient invoices</h6>
+                <div class="table-responsive"><table class="table table-hover align-middle">
+                  <thead><tr><th>Invoice</th><th>Patient</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr><td>BILL-0001</td><td>John Miller</td><td>$115.00</td><td>$115.00</td><td>$0.00</td><td><span class="badge text-bg-success">Paid</span></td></tr>
+                    <tr><td>BILL-0002</td><td>Carlos Diaz</td><td>$1,250.00</td><td>$500.00</td><td>$750.00</td><td><span class="badge text-bg-warning">Partial</span></td></tr>
+                    <tr><td>BILL-0003</td><td>Henry Wilson</td><td>$860.00</td><td>$0.00</td><td>$860.00</td><td><span class="badge text-bg-danger">Unpaid</span></td></tr>
+                    <tr><td>BILL-0004</td><td>Sofia Rossi</td><td>$115.00</td><td>$115.00</td><td>$0.00</td><td><span class="badge text-bg-success">Paid</span></td></tr>
+                  </tbody></table></div>
+              </div>
+            </div>
+
+            <!-- REPORTS -->
+            <div class="demo-view" data-view-panel="reports">
+              <div class="row g-3">
+                <div class="col-lg-7"><div class="demo-card"><h6>Revenue — last 6 months</h6><div style="height:250px"><canvas id="revenueChart"></canvas></div></div></div>
+                <div class="col-lg-5">
+                  <div class="demo-card mb-3"><h6>Bed occupancy</h6><div class="d-flex justify-content-between small fw-semibold"><span>General Ward A</span><span>50%</span></div><div class="progress mb-3"><div class="progress-bar bg-primary" style="width:50%"></div></div><div class="d-flex justify-content-between small fw-semibold"><span>ICU</span><span>25% + 1 reserved</span></div><div class="progress mb-3"><div class="progress-bar bg-success" style="width:50%"></div></div><div class="d-flex justify-content-between small fw-semibold"><span>Private Suites</span><span>25%</span></div><div class="progress"><div class="progress-bar bg-info" style="width:25%"></div></div></div>
+                  <div class="demo-card"><h6>Highlights</h6><p class="small mb-1"><i class="bi bi-arrow-up-right text-green me-1"></i>Cardiology is the busiest department this week.</p><p class="small mb-1"><i class="bi bi-capsule text-blue me-1"></i>Insulin Glargine is near its reorder level (18 vials).</p><p class="small mb-0"><i class="bi bi-tools text-warning me-1"></i>Bed ICU-04 is flagged for maintenance.</p></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="text-center text-muted small mt-3 mb-0">Interactive mock — the full app adds create/edit flows, role permissions, the patient portal and real data per hospital.</p>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="text-center mx-auto mb-4" style="max-width:680px">
+      <span class="kicker">Pricing</span>
+      <h2 class="mt-2">Start free. Grow when you do.</h2>
+      <p class="text-secondary">Every paid plan includes a 14-day trial. Use coupon <strong>WELCOME10</strong> for 10% off your first payment.</p>
+    </div>
+    <div class="d-flex justify-content-center align-items-center gap-3 mb-5">
+      <span class="fw-semibold" id="lblMonthly">Monthly</span>
+      <div class="form-check form-switch fs-4 m-0"><input class="form-check-input" type="checkbox" id="billingToggle" aria-label="Toggle yearly billing"></div>
+      <span class="fw-semibold" id="lblYearly">Yearly <span class="badge text-bg-success">save ~20%</span></span>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-4 col-xl"><div class="price-card"><h5>Free</h5><div><span class="amount">$<span class="price-amount" data-monthly="0" data-yearly="0">0</span></span> <span class="text-muted price-period">/ mo</span></div><p class="text-muted small billing-note">forever free</p><ul><li><i class="bi bi-check-circle-fill"></i>Up to 2 doctors</li><li><i class="bi bi-check-circle-fill"></i>200 patients</li><li><i class="bi bi-check-circle-fill"></i>Patient registration</li><li><i class="bi bi-check-circle-fill"></i>Appointment booking</li><li><i class="bi bi-check-circle-fill"></i>Email support</li></ul><a href="#demo" class="btn btn-outline-primary mt-auto">Start free</a></div></div>
+      <div class="col-md-6 col-lg-4 col-xl"><div class="price-card"><h5>Starter</h5><div><span class="amount">$<span class="price-amount" data-monthly="49" data-yearly="470">49</span></span> <span class="text-muted price-period">/ mo</span></div><p class="text-muted small billing-note">per month, billed monthly</p><ul><li><i class="bi bi-check-circle-fill"></i>Up to 10 doctors</li><li><i class="bi bi-check-circle-fill"></i>2,000 patients</li><li><i class="bi bi-check-circle-fill"></i>Bed management</li><li><i class="bi bi-check-circle-fill"></i>Laboratory module</li><li><i class="bi bi-check-circle-fill"></i>Billing &amp; invoices</li></ul><a href="#demo" class="btn btn-outline-primary mt-auto">Start trial</a></div></div>
+      <div class="col-md-6 col-lg-4 col-xl"><div class="price-card popular"><span class="pop-badge">MOST POPULAR</span><h5>Professional</h5><div><span class="amount">$<span class="price-amount" data-monthly="99" data-yearly="950">99</span></span> <span class="text-muted price-period">/ mo</span></div><p class="text-muted small billing-note">per month, billed monthly</p><ul><li><i class="bi bi-check-circle-fill"></i>Up to 30 doctors</li><li><i class="bi bi-check-circle-fill"></i>10,000 patients</li><li><i class="bi bi-check-circle-fill"></i>Pharmacy &amp; prescriptions</li><li><i class="bi bi-check-circle-fill"></i>Patient portal</li><li><i class="bi bi-check-circle-fill"></i>Reports &amp; analytics</li><li><i class="bi bi-check-circle-fill"></i>Priority support</li></ul><a href="#demo" class="btn btn-primary mt-auto">Start trial</a></div></div>
+      <div class="col-md-6 col-lg-4 col-xl"><div class="price-card"><h5>Business</h5><div><span class="amount">$<span class="price-amount" data-monthly="199" data-yearly="1910">199</span></span> <span class="text-muted price-period">/ mo</span></div><p class="text-muted small billing-note">per month, billed monthly</p><ul><li><i class="bi bi-check-circle-fill"></i>Up to 80 doctors</li><li><i class="bi bi-check-circle-fill"></i>50,000 patients</li><li><i class="bi bi-check-circle-fill"></i>API access</li><li><i class="bi bi-check-circle-fill"></i>Audit logs</li><li><i class="bi bi-check-circle-fill"></i>Phone support</li></ul><a href="#demo" class="btn btn-outline-primary mt-auto">Start trial</a></div></div>
+      <div class="col-md-6 col-lg-4 col-xl"><div class="price-card"><h5>Enterprise</h5><div><span class="amount">$<span class="price-amount" data-monthly="399" data-yearly="3830">399</span></span> <span class="text-muted price-period">/ mo</span></div><p class="text-muted small billing-note">per month, billed monthly</p><ul><li><i class="bi bi-check-circle-fill"></i>Unlimited doctors &amp; patients</li><li><i class="bi bi-check-circle-fill"></i>Dedicated account manager</li><li><i class="bi bi-check-circle-fill"></i>Custom integrations</li><li><i class="bi bi-check-circle-fill"></i>99.9% uptime SLA</li></ul><a href="#demo" class="btn btn-outline-primary mt-auto">Talk to us</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="text-center mx-auto mb-5" style="max-width:640px">
+      <span class="kicker">Loved by care teams</span>
+      <h2 class="mt-2">What hospitals say</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4"><div class="testi"><div class="stars mb-2">★★★★★</div><p>&ldquo;Reception stopped juggling three registers on day one. Appointments, beds and billing finally agree with each other — because they&rsquo;re the same system.&rdquo;</p><div class="d-flex align-items-center gap-2 mt-3"><span class="avatar-sm">AR</span><span><strong class="d-block small">Ayesha Rahman</strong><small class="text-muted">Administrator, City Care Hospital</small></span></div></div></div>
+      <div class="col-md-4"><div class="testi"><div class="stars mb-2">★★★★★</div><p>&ldquo;I check my OPD list, write prescriptions and see lab results from one screen. The patient&rsquo;s history is just there — allergies and all.&rdquo;</p><div class="d-flex align-items-center gap-2 mt-3"><span class="avatar-sm">SK</span><span><strong class="d-block small">Dr. Sarah Khan</strong><small class="text-muted">Cardiologist, City Care Hospital</small></span></div></div></div>
+      <div class="col-md-4"><div class="testi"><div class="stars mb-2">★★★★★</div><p>&ldquo;As a multi-branch group, tenant isolation was the deciding factor. Each hospital runs independently, and I still get one platform view.&rdquo;</p><div class="d-flex align-items-center gap-2 mt-3"><span class="avatar-sm">DO</span><span><strong class="d-block small">David Osei</strong><small class="text-muted">Finance Lead, Riverside Medical Center</small></span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="section">
+  <div class="container" style="max-width:820px">
+    <div class="text-center mb-5">
+      <span class="kicker">FAQ</span>
+      <h2 class="mt-2">Questions, answered</h2>
+    </div>
+    <div class="accordion" id="faqAcc">
+      <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Is my hospital&rsquo;s data separate from other hospitals?</button></h2><div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAcc"><div class="accordion-body text-secondary">Yes. MediCare Cloud is multi-tenant: every record carries your hospital&rsquo;s tenant ID and every query is scoped to it. Staff from another hospital can never see your patients, bills or records.</div></div></div>
+      <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">Which roles can log in?</button></h2><div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body text-secondary">Nine built-in roles: Super Admin (platform), Hospital Admin, Doctor, Receptionist, Nurse, Accountant, Pharmacist, Lab Technician and Patient — each with its own permissions, so people only see the modules their job needs.</div></div></div>
+      <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">How does the free trial work?</button></h2><div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body text-secondary">Paid plans start with a 14-day trial (30 days on Enterprise) — no card required. When you subscribe, use coupon WELCOME10 for 10% off your first payment. Payments are only marked verified after confirmation by our team, never automatically.</div></div></div>
+      <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">Can patients see their own records?</button></h2><div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body text-secondary">Yes — the patient portal shows a patient their own appointments, bills and the medical records their doctor has explicitly shared with them. Staff-only records stay staff-only.</div></div></div>
+      <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">What happens if we outgrow our plan?</button></h2><div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body text-secondary">Usage meters (doctors, staff, patients, departments, storage) show how close you are to your plan limits. Upgrade in one click from the subscription page — your data, users and history move with you.</div></div></div>
+      <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">Is this demo the full product?</button></h2><div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body text-secondary">This page is a static showcase with demo data — the live demo panel above is a working mock. The full product is a PHP/MySQL application with real logins, create/edit flows and per-hospital data, hosted on PHP hosting.</div></div></div>
+    </div>
+    <div class="cta-band mt-5 text-center">
+      <h3 class="mb-2">Ready to run your hospital in the cloud?</h3>
+      <p class="mb-4" style="opacity:.9">Start free today — your first department can be live in minutes.</p>
+      <a href="#demo" class="btn btn-light btn-lg px-4 fw-bold">Open the live demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <a class="brand text-white mb-3" href="#top"><span class="brand-mark"><i class="bi bi-heart-pulse-fill"></i></span><span>MediCare <em>Cloud</em></span></a>
+        <p class="small" style="color:#94a3b8">Hospital management, beautifully simple. A multi-tenant SaaS for patients, doctors, appointments, wards, pharmacy, lab and billing.</p>
+      </div>
+      <div class="col-6 col-lg-2"><h6>Product</h6><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#doctors">Doctors</a><a href="#demo">Live demo</a></div>
+      <div class="col-6 col-lg-3"><h6>Modules</h6><a href="#demo">Patients &amp; Appointments</a><a href="#demo">Wards &amp; Beds</a><a href="#demo">Pharmacy &amp; Laboratory</a><a href="#demo">Billing &amp; Reports</a></div>
+      <div class="col-lg-3"><h6>Demo access</h6><p class="small mb-1" style="color:#94a3b8">Demo hospital: City Care Hospital</p><p class="small mb-1" style="color:#94a3b8">Admin: admin@demo.com · Doctor: doctor@demo.com</p><p class="small mb-0" style="color:#94a3b8">Password: <code class="text-white">password</code> · Coupon: <code class="text-white">WELCOME10</code></p></div>
+    </div>
+    <hr style="border-color:#1e293b">
+    <div class="d-flex flex-wrap justify-content-between gap-2 small" style="color:#64748b">
+      <span>© 2026 MediCare Cloud. All demo data on this page is fictional.</span>
+      <span>Built with Bootstrap 5 · Chart.js · Inter</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  var shell = document.getElementById('demoShell');
+  var titleEl = document.getElementById('demoTitle');
+  var titles = {overview:'Overview',patients:'Patients',doctors:'Doctors',appointments:'Appointments',wards:'Wards & Beds',pharmacy:'Pharmacy',laboratory:'Laboratory',billing:'Billing',reports:'Reports'};
+  var reportsChart = null;
+
+  /* ---- Demo view switching ---- */
+  function showView(name){
+    document.querySelectorAll('.demo-side-link').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-view') === name); });
+    document.querySelectorAll('.demo-view').forEach(function(p){ p.classList.toggle('active', p.getAttribute('data-view-panel') === name); });
+    titleEl.textContent = titles[name] || 'Overview';
+    shell.classList.remove('sb-open');
+    if(name === 'reports' && !reportsChart){ initReportsChart(); }
+  }
+  document.querySelectorAll('.demo-side-link').forEach(function(btn){
+    btn.addEventListener('click', function(){ showView(btn.getAttribute('data-view')); });
+  });
+
+  /* ---- Demo sidebar: collapse on desktop, off-canvas on mobile ---- */
+  document.getElementById('demoBurger').addEventListener('click', function(){
+    if(window.innerWidth < 992){ shell.classList.toggle('sb-open'); }
+    else { shell.classList.toggle('sb-collapsed'); }
+  });
+  document.getElementById('demoBackdrop').addEventListener('click', function(){ shell.classList.remove('sb-open'); });
+
+  /* ---- Demo light/dark toggle ---- */
+  var themeBtn = document.getElementById('demoThemeToggle');
+  themeBtn.addEventListener('click', function(){
+    var dark = shell.getAttribute('data-theme') === 'dark';
+    shell.setAttribute('data-theme', dark ? 'light' : 'dark');
+    themeBtn.innerHTML = dark ? '<i class="bi bi-moon-stars"></i>' : '<i class="bi bi-sun"></i>';
+    if(window.Chart){ Chart.defaults.color = dark ? '#64748b' : '#94a3b8'; }
+  });
+
+  /* ---- Charts (overview) ---- */
+  if(window.Chart){
+    Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+    Chart.defaults.color = '#64748b';
+    new Chart(document.getElementById('visitsChart'), {
+      type: 'line',
+      data: { labels: ['Thu','Fri','Sat','Sun','Mon','Tue','Wed'],
+        datasets: [{ label: 'Patient visits', data: [32,41,28,22,45,52,48], borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,.10)', fill: true, tension: .4, pointBackgroundColor: '#2563eb' },
+                   { label: 'Appointments completed', data: [28,36,25,19,40,47,44], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,.08)', fill: true, tension: .4, pointBackgroundColor: '#10b981' }]},
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
+    });
+    new Chart(document.getElementById('deptChart'), {
+      type: 'doughnut',
+      data: { labels: ['Cardiology','Pediatrics','Neurology','Emergency','Orthopedics','Gen. Surgery'],
+        datasets: [{ data: [14,10,8,7,5,4], backgroundColor: ['#2563eb','#10b981','#0d9488','#f59e0b','#7c3aed','#64748b'], borderWidth: 2, borderColor: '#fff' }]},
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } } }
+    });
+  }
+  function initReportsChart(){
+    if(!window.Chart) return;
+    reportsChart = new Chart(document.getElementById('revenueChart'), {
+      type: 'bar',
+      data: { labels: ['Jun','Jul','Aug','Sep','Oct','Nov'],
+        datasets: [{ label: 'Revenue ($)', data: [142000,158500,149200,171800,183400,196200], backgroundColor: ['#93c5fd','#93c5fd','#93c5fd','#93c5fd','#60a5fa','#2563eb'], borderRadius: 8 }]},
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
+    });
+  }
+
+  /* ---- Pricing monthly/yearly toggle ---- */
+  var toggle = document.getElementById('billingToggle');
+  toggle.addEventListener('change', function(){
+    var yearly = toggle.checked;
+    document.querySelectorAll('.price-amount').forEach(function(el){
+      el.textContent = yearly ? Number(el.getAttribute('data-yearly')).toLocaleString('en-US') : el.getAttribute('data-monthly');
+    });
+    document.querySelectorAll('.price-period').forEach(function(el){ el.textContent = yearly ? '/ yr' : '/ mo'; });
+    document.querySelectorAll('.billing-note').forEach(function(el, i){
+      el.textContent = i === 0 ? (yearly ? 'forever free' : 'forever free') : (yearly ? 'per year, billed yearly — save ~20%' : 'per month, billed monthly');
+    });
+    document.getElementById('lblMonthly').classList.toggle('text-muted', yearly);
+    document.getElementById('lblYearly').classList.toggle('text-muted', !yearly);
+  });
+
+  /* ---- Animated stat counters ---- */
+  var counters = document.querySelectorAll('[data-count]');
+  if('IntersectionObserver' in window && counters.length){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting) return;
+        var el = entry.target; io.unobserve(el);
+        var target = parseFloat(el.getAttribute('data-count'));
+        var decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
+        var start = null;
+        function step(ts){
+          if(!start) start = ts;
+          var p = Math.min((ts - start) / 1200, 1);
+          el.textContent = (target * p).toFixed(decimals);
+          if(p < 1) requestAnimationFrame(step); else el.textContent = target.toFixed(decimals).replace(/\.0$/, '');
+        }
+        requestAnimationFrame(step);
+      });
+    }, { threshold: .5 });
+    counters.forEach(function(el){ io.observe(el); });
+  } else {
+    counters.forEach(function(el){ el.textContent = el.getAttribute('data-count'); });
+  }
+})();
+</script>
+</body>
+</html>
