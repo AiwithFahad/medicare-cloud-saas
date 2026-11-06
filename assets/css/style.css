@@ -156,3 +156,24 @@ html[data-theme="dark"] .bed-occupied{background:#2b1220}
   .stat-card .num{font-size:1.25rem}
   .topbar h1{font-size:1rem}
 }
+
+/* ---------------- Upgrade v2 additions ---------------- */
+.mc-toast-wrap{position:fixed;top:76px;right:18px;z-index:1090;display:flex;flex-direction:column;gap:8px;max-width:min(360px,90vw)}
+.mc-loading{position:relative;pointer-events:none}
+.mc-loading::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.55);z-index:5}
+html[data-theme="dark"] .mc-loading::after{background:rgba(11,18,32,.55)}
+.mc-loading::before{content:"";position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:50%;border:3px solid var(--blue-soft);border-top-color:var(--blue);animation:mc-spin .7s linear infinite;z-index:6}
+@keyframes mc-spin{to{transform:rotate(360deg)}}
+.slot-chip{display:inline-block;margin:0 6px 6px 0}
+.timeline{position:relative;margin:0;padding:0 0 0 22px;list-style:none}
+.timeline::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.timeline li{position:relative;padding:0 0 16px}
+.timeline li::before{content:"";position:absolute;left:-19px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.timeline li.tl-green::before{background:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.timeline li.tl-amber::before{background:#f59e0b;box-shadow:0 0 0 3px #fef3c7}
+.cal-day{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);height:100%}
+.cal-day.off{opacity:.55;background:var(--surface-2)}
+.cal-day.today{border-color:var(--blue);box-shadow:var(--shadow)}
+.bed-tile.occupied{background:#fef2f2;border-color:#fecaca}
+html[data-theme="dark"] .bed-tile.occupied{background:#2a1215;border-color:#7f1d1d}
+.doc-thumb{width:40px;height:40px;border-radius:10px;background:var(--blue-soft);color:var(--blue);display:inline-flex;align-items:center;justify-content:center;font-size:1.1rem;flex:none}

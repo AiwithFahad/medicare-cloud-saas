@@ -26,6 +26,8 @@ if (!empty($cu)) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e(($pageTitle ?? 'Dashboard')) ?> | <?= e(APP_NAME) ?></title>
 <meta name="description" content="MediCare Cloud — multi-tenant Hospital Management SaaS">
+<meta name="csrf-token" content="<?= e(csrf_token()) ?>">
+<meta name="api-base" content="<?= $b ?>api/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -36,7 +38,7 @@ if (!empty($cu)) {
 </head>
 <body>
 <div class="layout">
-<?php include __DIR__ . '/sidebar.php'; ?>
+<?php if (!empty($panelSidebar)) { include __DIR__ . '/panel-sidebar.php'; } else { include __DIR__ . '/sidebar.php'; } ?>
 <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 <main class="main">
 <header class="topbar">
@@ -65,10 +67,15 @@ if (!empty($cu)) {
     <ul class="dropdown-menu dropdown-menu-end">
       <li><span class="dropdown-item-text small text-muted"><?= e((string)($cu['email'] ?? '')) ?></span></li>
       <li><hr class="dropdown-divider"></li>
+      <?php
+      $panelKey = (string)($panelSidebar ?? '');
+      $settingsUrl = $panelKey === 'admin' ? $b . 'admin/settings.php' : $b . 'app/settings.php';
+      $patientUrl  = $panelKey === 'patient' ? $b . 'patient/profile.php' : $b . 'app/portal.php';
+      ?>
       <?php if (($cu['role'] ?? '') === 'patient'): ?>
-        <li><a class="dropdown-item" href="<?= $b ?>app/portal.php"><i class="bi bi-person-heart me-2"></i>My Portal</a></li>
+        <li><a class="dropdown-item" href="<?= $patientUrl ?>"><i class="bi bi-person-heart me-2"></i>My Profile</a></li>
       <?php elseif (($cu['role'] ?? '') !== 'super_admin'): ?>
-        <li><a class="dropdown-item" href="<?= $b ?>app/settings.php"><i class="bi bi-gear me-2"></i>Settings</a></li>
+        <li><a class="dropdown-item" href="<?= $settingsUrl ?>"><i class="bi bi-gear me-2"></i>Settings</a></li>
         <li><a class="dropdown-item" href="<?= $b ?>app/subscription.php"><i class="bi bi-credit-card me-2"></i>Subscription</a></li>
       <?php endif; ?>
       <li><a class="dropdown-item text-danger" href="<?= $b ?>auth/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>

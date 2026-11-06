@@ -1,0 +1,5 @@
+Insurance provider: DemoHealth Assurance
+Policy no: DHA-2026-8841
+Member: John Miller (PAT-0001)
+Coverage: Inpatient + outpatient, 80% co-pay after deductible.
+(This is a sample document seeded for the demo tenant.)

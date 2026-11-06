@@ -16,6 +16,8 @@ $pageTitle = $pageTitle ?? 'Super Admin';
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($pageTitle) ?> | MediCare Cloud — Platform</title>
 <meta name="description" content="MediCare Cloud — platform administration console">
+<meta name="csrf-token" content="<?= e(csrf_token()) ?>">
+<meta name="api-base" content="../api/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">

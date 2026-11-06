@@ -205,7 +205,65 @@ await fetch('/api/notifications.php', {
 
 ---
 
-## 3. Planned REST architecture (not yet live)
+## 3. Upgrade v2 panel API (live)
+
+Session-authenticated JSON endpoints used by the role panels
+(`admin/`, `doctor/`, `receptionist/`, `patient/`). Same rules as above:
+prepared statements, `tenant_id` scoping, permission checks per action,
+CSRF via the `X-CSRF` header or `_csrf` field on every POST (419 on
+mismatch), and `{ "ok": true, … }` / `{ "ok": false, "error": "…" }`
+envelopes. Shared bootstrap: `api/common.php`.
+
+### Dashboard statistics — `GET /api/dashboard-stats.php`
+
+Real aggregates + Chart.js series for the dashboards. Tenant scope
+(default): `stats` (total/new patients, doctors total + on duty today,
+today/pending/completed/cancelled appointments, revenue, pending
+invoices, beds, emergency cases, stock alerts, lab queue, reminders due,
+monthly expenses) and `charts` (`weekly_registrations`,
+`monthly_appointments`, `revenue`, `department_performance`,
+`doctor_performance`, `admission_trends`). Optional `from`/`to` change
+the revenue window; `doctor_id` restricts appointment series (the doctor
+panel). `?scope=platform` (super admin only) returns tenant counts,
+MRR/ARR, verified revenue and plan mix.
+
+### Patients — `/api/patients.php`
+
+- `GET ?q=&gender=&page=&per_page=` → `{ rows, total, page, pages }`
+  (`patients.view`). Rows include age, visit count and admission status.
+- `POST action=create|update` (`patients.manage`) — Patient IDs are
+  generated server-side (`PAT-0001`, …); creates respect the plan limit.
+- `POST action=delete` (`patients.manage`).
+
+### Appointments — `/api/appointments.php`
+
+- `GET ?q=&status=&date=&doctor_id=&page=` (`appointments.view`).
+  Doctors are force-filtered to their own appointments and patients to
+  their own — client parameters cannot widen the scope.
+- `POST action=create` — books into a **free slot** computed from
+  `doctor_schedules` (Emergency visits skip the slot check), snapshots
+  the doctor's consultation fee, creates a front-desk reminder
+  (lead time: `tenant_settings.appointment_reminder_hours`, default 1)
+  and notifies the patient in-app when they have a portal login.
+- `POST action=status` — scheduled/confirmed/completed/cancelled/
+  no_show (`appointments.manage`; patients may only cancel their own).
+- `POST action=reschedule` — new date + slot, availability-checked.
+
+### Doctor availability — `GET /api/doctor-availability.php`
+
+`?doctor_id=&date=&ignore=` → `{ available, reason, slots: ["09:00", …],
+schedule }`. Slots come from `doctor_schedules` minus booked
+(scheduled/confirmed) appointments; past times are excluded for today.
+
+### Wards — `/api/wards.php`
+
+- `GET` (`wards.view`) → wards with beds and current patient names
+  (live bed board).
+- `POST action=bed_status` (`wards.manage`) — set a bed available /
+  reserved / maintenance, or occupied for a chosen patient. Formal
+  admission/discharge stays in the admissions workflow.
+
+## 4. Planned REST architecture (not yet live)
 
 The public API for integrations (Business plan and above) is planned on
 top of the same domain layer. Design targets:

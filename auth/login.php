@@ -67,16 +67,20 @@ if (is_post()) {
                 $recordAttempt(false);
                 $error = 'Your account is not active. Please contact your hospital administrator.';
             } else {
-                // Suspended tenants are blocked at the door as well.
-                $tenantSuspended = false;
+                // Suspended tenants are blocked at the door as well; pending
+                // tenants (Upgrade v2 approval workflow) wait for activation.
+                $tenantStatus = null;
                 if (!empty($row['tenant_id'])) {
                     $ts = $pdo->prepare('SELECT status FROM tenants WHERE id = ?');
                     $ts->execute([(int)$row['tenant_id']]);
-                    $tenantSuspended = $ts->fetchColumn() === 'suspended';
+                    $tenantStatus = $ts->fetchColumn() ?: null;
                 }
-                if ($tenantSuspended) {
+                if ($tenantStatus === 'suspended') {
                     $recordAttempt(false);
                     $error = 'Your hospital account has been suspended. Please contact MediCare Cloud support.';
+                } elseif ($tenantStatus === 'pending') {
+                    $recordAttempt(false);
+                    $error = 'Your hospital registration is still awaiting platform approval. You will be able to sign in as soon as the MediCare Cloud team activates your workspace.';
                 } else {
                     $recordAttempt(true);
 
@@ -103,9 +107,12 @@ if (is_post()) {
                     log_activity($pdo, 'User signed in: ' . (string)$row['email']);
 
                     redirect(match ((string)$row['role_slug']) {
-                        'super_admin' => '../super-admin/index.php',
-                        'patient'     => '../app/portal.php',
-                        default       => '../app/dashboard.php',
+                        'super_admin'   => '../super-admin/dashboard.php',
+                        'hospital_admin' => '../admin/dashboard.php',
+                        'doctor'        => '../doctor/dashboard.php',
+                        'receptionist'  => '../receptionist/dashboard.php',
+                        'patient'       => '../patient/dashboard.php',
+                        default         => '../app/dashboard.php',
                     });
                 }
             }

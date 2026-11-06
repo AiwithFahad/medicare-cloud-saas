@@ -62,6 +62,36 @@ platform with subscriptions handled for you.
 - **JSON API** — session-authenticated global search and notifications
   endpoints (see [docs/API.md](docs/API.md)).
 
+### Upgrade v2 — separate role panels + real JS layer (2026-11-06)
+
+The app keeps its original design, branding and the shared `app/` tree, and
+adds **dedicated page trees per role**, all wired to the same live database
+with server-side permission checks and `tenant_id` isolation on every query:
+
+| Panel | Path | Highlights |
+| --- | --- | --- |
+| Super Admin | `super-admin/` | Platform dashboard, **hospital registration approvals** (new hospitals start `pending`), hospitals with usage vs plan limits, platform revenue reports |
+| Hospital Admin | `admin/` | Live KPI dashboard (API-driven charts), patients with medical timeline + documents, doctors with weekly schedules & availability calendar, appointments with slot booking, wards/beds/admissions, pharmacy dispensing, lab reports, billing + expenses + transactions, reports with CSV exports |
+| Doctor | `doctor/` | Own dashboard, appointments, patients, prescription writer with print view, own schedule editor, personal reports |
+| Receptionist | `receptionist/` | Front-desk dashboard with check-in, patients, appointments + emergency board, billing & payment collection |
+| Patient | `patient/` | Portal dashboard, self-booking into real free slots, shared medical records + documents, prescriptions, invoices, profile |
+
+- **JS layer** (`MediCare` namespace in `assets/js/app.js`): fetch/AJAX CRUD
+  with modal forms, live search + filters + pagination, toast notifications,
+  Bootstrap confirm-before-delete (replaces `window.confirm`), form
+  validation, loading states, Chart.js helpers and an appointment
+  **slot picker** driven by structured doctor schedules.
+- **New API endpoints** (`api/`): `dashboard-stats.php` (real aggregates +
+  chart series, tenant or platform scope), `patients.php` (list + CRUD),
+  `appointments.php` (list, book, status, reschedule — creates reminders),
+  `doctor-availability.php` (free slots), `wards.php` (live bed board).
+- **Database**: non-destructive migrations in `database/migrations/`
+  (`001_upgrade_v2.sql` — patient documents, expenses, emergency cases,
+  reminders, doctor schedules, tenant `pending` status; `002_…sql` —
+  receptionist `billing.manage`), folded into `database.sql` for fresh
+  installs. Demo logins and seeds are unchanged.
+- Full details: [UPGRADE-SUMMARY.md](UPGRADE-SUMMARY.md).
+
 ### Plans
 
 | Plan | Monthly | Yearly | Highlights |
@@ -94,9 +124,21 @@ medicare-cloud-saas/
 ├── README.md
 ├── api/
 │   ├── search.php         # GET  global search (JSON, tenant-scoped)
-│   └── notifications.php  # GET/POST notifications (JSON, CSRF-protected)
+│   ├── notifications.php  # GET/POST notifications (JSON, CSRF-protected)
+│   ├── dashboard-stats.php # GET dashboard aggregates + chart series
+│   ├── patients.php       # GET/POST patient list + CRUD (JSON)
+│   ├── appointments.php   # GET/POST appointments: book/status/reschedule
+│   ├── doctor-availability.php # GET free slots for a doctor + date
+│   ├── wards.php          # GET/POST live bed board
+│   └── common.php         # Shared API bootstrap (auth, CSRF, JSON helpers)
 ├── app/                   # Tenant app: dashboard, patients, doctors,
 │                          # appointments, wards, pharmacy, lab, billing…
+├── admin/                 # Upgrade v2: Hospital Admin panel (12 pages)
+├── doctor/                # Upgrade v2: Doctor panel (6 pages)
+├── receptionist/          # Upgrade v2: Receptionist panel (4 pages)
+├── patient/               # Upgrade v2: Patient portal (6 pages)
+├── database/migrations/   # Upgrade v2: numbered non-destructive migrations
+├── storage/documents/     # Patient document uploads (web access denied)
 ├── assets/
 │   ├── css/style.css      # Design system (brand, layout, dark theme)
 │   ├── js/                # Theme / sidebar / chart helpers
@@ -132,6 +174,11 @@ and a web server (Apache/Nginx) or PHP's built-in server for local dev.
 mysql -u root -p -e "CREATE DATABASE medicare_cloud CHARACTER SET utf8mb4;"
 mysql -u root -p medicare_cloud < database.sql
 ```
+
+> **Upgrading an existing install instead?** Do not re-import `database.sql`.
+> Apply the numbered, non-destructive migrations in order:
+> `mysql -u root -p medicare_cloud < database/migrations/001_upgrade_v2.sql`
+> then `database/migrations/002_receptionist_billing_manage.sql`.
 
 `database.sql` creates all tables **and** seeds the plans, roles,
 permissions, coupons, the demo tenant (City Care Hospital), staff users,

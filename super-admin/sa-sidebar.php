@@ -9,15 +9,17 @@ $saLink = static function (string $file, string $icon, string $label) use ($saCu
 };
 ?>
 <aside class="sidebar sa-sidebar" id="appSidebar">
-  <a class="brand" href="index.php">
+  <a class="brand" href="dashboard.php">
     <span class="brand-mark"><i class="bi bi-heart-pulse-fill"></i></span>
     <span class="brand-text">MediCare <em>Cloud</em><span class="d-block" style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75">— Platform</span></span>
   </a>
   <p class="side-heading">Platform</p>
   <nav>
-    <?= $saLink('index.php', 'bi-grid-1x2', 'Dashboard') ?>
-    <?= $saLink('tenants.php', 'bi-buildings', 'Tenants') ?>
+    <?= $saLink('dashboard.php', 'bi-grid-1x2', 'Dashboard') ?>
+    <?= $saLink('hospitals.php', 'bi-buildings', 'Hospitals') ?>
+    <?= $saLink('tenants.php', 'bi-building-gear', 'Tenant Manager') ?>
     <?= $saLink('users.php', 'bi-people', 'Users') ?>
+    <?= $saLink('reports.php', 'bi-bar-chart', 'Platform Reports') ?>
   </nav>
   <p class="side-heading">Billing</p>
   <nav>

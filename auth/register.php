@@ -97,7 +97,7 @@ if (is_post()) {
 
             $s = $pdo->prepare(
                 'INSERT INTO tenants (name, slug, email, phone, city, country, status, created_at, updated_at)
-                 VALUES (?, ?, ?, ?, ?, ?, "active", NOW(), NOW())'
+                 VALUES (?, ?, ?, ?, ?, ?, "pending", NOW(), NOW())'
             );
             $s->execute([
                 $old['hospital_name'],
@@ -139,7 +139,7 @@ if (is_post()) {
 
             $success    = true;
             $verifyLink = 'verify.php?token=' . urlencode($verificationToken);
-            flash('success', 'Hospital registered successfully. Please verify your email address using the verification link, then sign in to start your ' . $trialDays . '-day free trial.');
+            flash('success', 'Hospital registered successfully. Please verify your email address using the verification link. Your workspace starts its ' . $trialDays . '-day free trial as soon as the platform team approves your registration — you will be able to sign in right after approval.');
         } catch (Throwable $ex) {
             if ($pdo->inTransaction()) {
                 $pdo->rollBack();

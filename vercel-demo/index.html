@@ -298,7 +298,15 @@ h1,h2,h3,h4,h5{font-weight:700;letter-spacing:-.01em}
     <div class="text-center mx-auto mb-4" style="max-width:720px">
       <span class="kicker">Live app demo</span>
       <h2 class="mt-2">This is the actual dashboard</h2>
-      <p class="text-secondary">A working mock of the City Care Hospital workspace. Click through the sidebar — every view below runs in your browser. <span class="demo-badge">Demo data</span></p>
+      <p class="text-secondary">A working mock of the City Care Hospital workspace. Switch roles to preview each panel from the Upgrade v2 page trees — every view below runs in your browser. <span class="demo-badge">Demo data</span></p>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-3" role="group" aria-label="Preview a role panel">
+      <button type="button" class="btn btn-outline-primary btn-sm demo-role-btn" data-role="super"><i class="bi bi-shield-lock me-1"></i>Super Admin</button>
+      <button type="button" class="btn btn-primary btn-sm demo-role-btn" data-role="admin"><i class="bi bi-hospital me-1"></i>Hospital Admin</button>
+      <button type="button" class="btn btn-outline-primary btn-sm demo-role-btn" data-role="doctor"><i class="bi bi-person-badge me-1"></i>Doctor</button>
+      <button type="button" class="btn btn-outline-primary btn-sm demo-role-btn" data-role="receptionist"><i class="bi bi-telephone me-1"></i>Receptionist</button>
+      <button type="button" class="btn btn-outline-primary btn-sm demo-role-btn" data-role="patient"><i class="bi bi-person-heart me-1"></i>Patient</button>
     </div>
 
     <div class="demo-shell" id="demoShell">
@@ -307,20 +315,24 @@ h1,h2,h3,h4,h5{font-weight:700;letter-spacing:-.01em}
         <!-- Sidebar -->
         <aside class="demo-sidebar" id="demoSidebar">
           <a class="brand mb-3" href="#demo" style="color:var(--d-ink)"><span class="brand-mark"><i class="bi bi-heart-pulse-fill"></i></span><span class="brand-text">MediCare <em>Cloud</em></span></a>
-          <div class="side-heading small text-uppercase fw-bold mb-2" style="color:var(--d-muted);letter-spacing:.12em;font-size:.68rem">Hospital</div>
-          <button class="demo-side-link active" data-view="overview"><i class="bi bi-grid-1x2-fill"></i><span class="lbl">Overview</span></button>
-          <button class="demo-side-link" data-view="patients"><i class="bi bi-people"></i><span class="lbl">Patients</span></button>
-          <button class="demo-side-link" data-view="doctors"><i class="bi bi-person-badge"></i><span class="lbl">Doctors</span></button>
-          <button class="demo-side-link" data-view="appointments"><i class="bi bi-calendar2-check"></i><span class="lbl">Appointments</span></button>
-          <button class="demo-side-link" data-view="wards"><i class="bi bi-hospital"></i><span class="lbl">Wards &amp; Beds</span></button>
-          <button class="demo-side-link" data-view="pharmacy"><i class="bi bi-capsule"></i><span class="lbl">Pharmacy</span></button>
-          <button class="demo-side-link" data-view="laboratory"><i class="bi bi-droplet-half"></i><span class="lbl">Laboratory</span></button>
-          <button class="demo-side-link" data-view="billing"><i class="bi bi-receipt"></i><span class="lbl">Billing</span></button>
-          <button class="demo-side-link" data-view="reports"><i class="bi bi-graph-up-arrow"></i><span class="lbl">Reports</span></button>
+          <div class="side-heading small text-uppercase fw-bold mb-2" style="color:var(--d-muted);letter-spacing:.12em;font-size:.68rem" id="demoSideHeading">Hospital</div>
+          <button class="demo-side-link" data-view="platform" data-roles="super"><i class="bi bi-shield-lock"></i><span class="lbl">Platform Dashboard</span></button>
+          <button class="demo-side-link active" data-view="overview" data-roles="admin"><i class="bi bi-grid-1x2-fill"></i><span class="lbl">Overview</span></button>
+          <button class="demo-side-link" data-view="doctorhome" data-roles="doctor"><i class="bi bi-grid-1x2-fill"></i><span class="lbl">Doctor Dashboard</span></button>
+          <button class="demo-side-link" data-view="frontdesk" data-roles="receptionist"><i class="bi bi-grid-1x2-fill"></i><span class="lbl">Front Desk</span></button>
+          <button class="demo-side-link" data-view="portal" data-roles="patient"><i class="bi bi-grid-1x2-fill"></i><span class="lbl">My Portal</span></button>
+          <button class="demo-side-link" data-view="patients" data-roles="admin doctor receptionist"><i class="bi bi-people"></i><span class="lbl">Patients</span></button>
+          <button class="demo-side-link" data-view="doctors" data-roles="admin"><i class="bi bi-person-badge"></i><span class="lbl">Doctors</span></button>
+          <button class="demo-side-link" data-view="appointments" data-roles="admin doctor receptionist patient"><i class="bi bi-calendar2-check"></i><span class="lbl">Appointments</span></button>
+          <button class="demo-side-link" data-view="wards" data-roles="admin receptionist"><i class="bi bi-hospital"></i><span class="lbl">Wards &amp; Beds</span></button>
+          <button class="demo-side-link" data-view="pharmacy" data-roles="admin doctor"><i class="bi bi-capsule"></i><span class="lbl">Pharmacy</span></button>
+          <button class="demo-side-link" data-view="laboratory" data-roles="admin doctor"><i class="bi bi-droplet-half"></i><span class="lbl">Laboratory</span></button>
+          <button class="demo-side-link" data-view="billing" data-roles="admin receptionist patient"><i class="bi bi-receipt"></i><span class="lbl">Billing</span></button>
+          <button class="demo-side-link" data-view="reports" data-roles="admin doctor super"><i class="bi bi-graph-up-arrow"></i><span class="lbl">Reports</span></button>
           <div class="mt-auto pt-3" style="border-top:1px solid var(--d-line)">
             <div class="d-flex align-items-center gap-2 px-1">
-              <span class="avatar-sm">AR</span>
-              <span class="lbl"><strong class="d-block small lh-1">Ayesha Rahman</strong><small style="color:var(--d-muted)">Hospital Admin</small></span>
+              <span class="avatar-sm" id="demoUserInitials">AR</span>
+              <span class="lbl"><strong class="d-block small lh-1" id="demoUserName">Ayesha Rahman</strong><small style="color:var(--d-muted)" id="demoUserRole">Hospital Admin</small></span>
             </div>
           </div>
         </aside>
@@ -334,7 +346,7 @@ h1,h2,h3,h4,h5{font-weight:700;letter-spacing:-.01em}
             <div class="search-mock"><i class="bi bi-search"></i><span>Search patients, doctors…</span></div>
             <button class="icon-btn" type="button" aria-label="Notifications"><i class="bi bi-bell"></i><span class="dot"></span></button>
             <button class="icon-btn" id="demoThemeToggle" type="button" aria-label="Toggle demo light and dark theme"><i class="bi bi-moon-stars"></i></button>
-            <span class="avatar-sm">AR</span>
+            <span class="avatar-sm" id="demoUserInitialsTop">AR</span>
           </div>
           <div class="demo-body">
 
@@ -366,10 +378,10 @@ h1,h2,h3,h4,h5{font-weight:700;letter-spacing:-.01em}
             <!-- PATIENTS -->
             <div class="demo-view" data-view-panel="patients">
               <div class="demo-card">
-                <div class="d-flex justify-content-between align-items-center mb-3"><h6 class="mb-0">Patients <span class="text-muted fw-normal">(8 demo records)</span></h6><button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Add Patient</button></div>
+                <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3"><h6 class="mb-0">Patients <span class="text-muted fw-normal">(8 demo records)</span></h6><span class="d-flex gap-2"><input class="form-control form-control-sm demo-table-search" data-target="demoPatientsBody" type="search" placeholder="Live search patients…" style="width:210px" aria-label="Search patients"><button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Add Patient</button></span></div>
                 <div class="table-responsive"><table class="table table-hover align-middle">
                   <thead><tr><th>Code</th><th>Patient</th><th>Gender / Age</th><th>Blood</th><th>Phone</th><th>Status</th></tr></thead>
-                  <tbody>
+                  <tbody id="demoPatientsBody">
                     <tr><td>PAT-0001</td><td><span class="avatar-sm me-2">JM</span>John Miller</td><td>Male · 38</td><td>O+</td><td>+1 555 010 9008</td><td><span class="badge text-bg-success">Active</span></td></tr>
                     <tr><td>PAT-0002</td><td><span class="avatar-sm me-2">FN</span>Fatima Noor</td><td>Female · 31</td><td>A+</td><td>+1 555 012 3301</td><td><span class="badge text-bg-success">Active</span></td></tr>
                     <tr><td>PAT-0003</td><td><span class="avatar-sm me-2">CD</span>Carlos Diaz</td><td>Male · 47</td><td>B−</td><td>+1 555 012 3303</td><td><span class="badge text-bg-primary">Admitted</span></td></tr>
@@ -402,10 +414,10 @@ h1,h2,h3,h4,h5{font-weight:700;letter-spacing:-.01em}
             <!-- APPOINTMENTS -->
             <div class="demo-view" data-view-panel="appointments">
               <div class="demo-card">
-                <div class="d-flex justify-content-between align-items-center mb-3"><h6 class="mb-0">Appointments</h6><button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Book Appointment</button></div>
+                <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3"><h6 class="mb-0">Appointments</h6><span class="d-flex gap-2"><input class="form-control form-control-sm demo-table-search" data-target="demoApptsBody" type="search" placeholder="Live search…" style="width:170px" aria-label="Search appointments"><select class="form-select form-select-sm demo-status-filter" data-target="demoApptsBody" style="width:140px" aria-label="Filter by status"><option value="">All statuses</option><option>Scheduled</option><option>Confirmed</option><option>Completed</option></select><button class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Book Appointment</button></span></div>
                 <div class="table-responsive"><table class="table table-hover align-middle">
                   <thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Doctor</th><th>Reason</th><th>Fee</th><th>Status</th></tr></thead>
-                  <tbody>
+                  <tbody id="demoApptsBody">
                     <tr><td>Today</td><td>09:30 AM</td><td>John Miller</td><td>Dr. Sarah Khan</td><td>Follow-up for blood pressure</td><td>$80</td><td><span class="badge text-bg-success">Confirmed</span></td></tr>
                     <tr><td>Today</td><td>10:00 AM</td><td>Fatima Noor</td><td>Dr. Laura Kim</td><td>Child vaccination &amp; check-up</td><td>$60</td><td><span class="badge text-bg-info">Scheduled</span></td></tr>
                     <tr><td>Today</td><td>11:00 AM</td><td>Mei Ling</td><td>Dr. James Patel</td><td>Recurring migraines — first consult</td><td>$90</td><td><span class="badge text-bg-info">Scheduled</span></td></tr>
@@ -507,6 +519,81 @@ h1,h2,h3,h4,h5{font-weight:700;letter-spacing:-.01em}
               </div>
             </div>
 
+            <!-- PLATFORM (SUPER ADMIN) -->
+            <div class="demo-view" data-view-panel="platform">
+              <div class="row g-3 mb-3">
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-blue"><i class="bi bi-buildings"></i></span><div><div class="num">3</div><div class="lbl2">Hospitals</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-amber"><i class="bi bi-hourglass-split"></i></span><div><div class="num">1</div><div class="lbl2">Pending Approvals</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-green"><i class="bi bi-graph-up-arrow"></i></span><div><div class="num">$247</div><div class="lbl2">MRR</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-violet"><i class="bi bi-credit-card-2-front"></i></span><div><div class="num">1</div><div class="lbl2">Payments to Verify</div></div></div></div>
+              </div>
+              <div class="row g-3">
+                <div class="col-lg-7"><div class="demo-card"><h6>Verified platform revenue — last 6 months</h6><div style="height:230px"><canvas id="saRevenueChart"></canvas></div></div></div>
+                <div class="col-lg-5"><div class="demo-card"><h6 class="mb-3">Registration approvals</h6>
+                  <div class="d-flex justify-content-between align-items-center py-2 border-bottom"><span><strong class="d-block small">Green Valley Clinic</strong><small style="color:var(--d-muted)">Starter plan · registered today</small></span><span class="badge text-bg-warning">Pending</span></div>
+                  <div class="d-flex justify-content-between align-items-center py-2 border-bottom"><span><strong class="d-block small">City Care Hospital</strong><small style="color:var(--d-muted)">Professional plan</small></span><span class="badge text-bg-success">Active</span></div>
+                  <div class="d-flex justify-content-between align-items-center py-2"><span><strong class="d-block small">Riverside Medical Center</strong><small style="color:var(--d-muted)">Starter plan · yearly</small></span><span class="badge text-bg-success">Active</span></div>
+                  <p class="small mt-3 mb-0" style="color:var(--d-muted)">New hospitals register as <strong>pending</strong> and are approved here. Subscription payments stay <strong>pending until verified</strong> — never auto-approved.</p>
+                </div></div>
+              </div>
+            </div>
+
+            <!-- DOCTOR HOME -->
+            <div class="demo-view" data-view-panel="doctorhome">
+              <div class="row g-3 mb-3">
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-blue"><i class="bi bi-calendar2-check"></i></span><div><div class="num">3</div><div class="lbl2">My Appointments Today</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-green"><i class="bi bi-people"></i></span><div><div class="num">128</div><div class="lbl2">My Patients</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-teal"><i class="bi bi-prescription2"></i></span><div><div class="num">342</div><div class="lbl2">Prescriptions Written</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-amber"><i class="bi bi-clock-history"></i></span><div><div class="num">9–2</div><div class="lbl2">Clinic Hours Today</div></div></div></div>
+              </div>
+              <div class="row g-3">
+                <div class="col-lg-7"><div class="demo-card"><h6 class="mb-3">Today's clinic — Dr. Sarah Khan</h6>
+                  <div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Time</th><th>Patient</th><th>Reason</th><th>Status</th></tr></thead><tbody>
+                    <tr><td>09:30 AM</td><td>John Miller</td><td>Follow-up for blood pressure</td><td><span class="badge text-bg-success">Confirmed</span></td></tr>
+                    <tr><td>11:30 AM</td><td>Henry Wilson</td><td>ECG + stress test review</td><td><span class="badge text-bg-info">Scheduled</span></td></tr>
+                    <tr><td>12:30 PM</td><td>Sofia Rossi</td><td>ECG review</td><td><span class="badge text-bg-secondary">Completed</span></td></tr>
+                  </tbody></table></div>
+                  <p class="small mt-3 mb-0" style="color:var(--d-muted)">Doctors see only their own appointments and patients — enforced server-side in the real app.</p>
+                </div></div>
+                <div class="col-lg-5"><div class="demo-card"><h6>My appointments — last 6 months</h6><div style="height:230px"><canvas id="docMonthlyChart"></canvas></div></div></div>
+              </div>
+            </div>
+
+            <!-- FRONT DESK (RECEPTIONIST) -->
+            <div class="demo-view" data-view-panel="frontdesk">
+              <div class="row g-3 mb-3">
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-blue"><i class="bi bi-calendar2-check"></i></span><div><div class="num">48</div><div class="lbl2">Appointments Today</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-amber"><i class="bi bi-hourglass-split"></i></span><div><div class="num">17</div><div class="lbl2">Awaiting Check-in</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-green"><i class="bi bi-person-plus"></i></span><div><div class="num">9</div><div class="lbl2">New Patients Today</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-rose"><i class="bi bi-heart-pulse"></i></span><div><div class="num">2</div><div class="lbl2">Emergency — Active</div></div></div></div>
+              </div>
+              <div class="demo-card">
+                <h6 class="mb-3">Reminders to work through</h6>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom"><span><strong class="d-block small">Call John Miller</strong><small style="color:var(--d-muted)">Confirm today's 9:30 AM appointment · call · due 1h ago</small></span><span class="badge text-bg-warning">Pending</span></div>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom"><span><strong class="d-block small">Post-discharge follow-up — Fatima Noor</strong><small style="color:var(--d-muted)">Follow-up call · tomorrow</small></span><span class="badge text-bg-info">Scheduled</span></div>
+                <div class="d-flex justify-content-between align-items-center py-2"><span><strong class="d-block small">Payment reminder — BILL-0003</strong><small style="color:var(--d-muted)">SMS to Henry Wilson · in 2h</small></span><span class="badge text-bg-info">Scheduled</span></div>
+                <p class="small mt-3 mb-0" style="color:var(--d-muted)">Booking an appointment automatically creates a front-desk reminder before the visit.</p>
+              </div>
+            </div>
+
+            <!-- PATIENT PORTAL -->
+            <div class="demo-view" data-view-panel="portal">
+              <div class="row g-3 mb-3">
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-blue"><i class="bi bi-calendar-event"></i></span><div><div class="num">Today</div><div class="lbl2">Next Visit · 9:30 AM</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-teal"><i class="bi bi-prescription2"></i></span><div><div class="num">Rx</div><div class="lbl2">Latest Prescription Ready</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-amber"><i class="bi bi-wallet2"></i></span><div><div class="num">$0</div><div class="lbl2">Outstanding Balance</div></div></div></div>
+                <div class="col-6 col-xl-3"><div class="demo-card stat-card"><span class="stat-ic ic-green"><i class="bi bi-file-medical"></i></span><div><div class="num">3</div><div class="lbl2">Records Shared With Me</div></div></div></div>
+              </div>
+              <div class="demo-card">
+                <h6 class="mb-3">Welcome back, John Miller <span class="badge text-bg-primary ms-1">PAT-0001</span></h6>
+                <div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>When</th><th>Doctor</th><th>Type</th><th>Status</th></tr></thead><tbody>
+                  <tr><td>Today · 09:30 AM</td><td>Dr. Sarah Khan</td><td>OPD</td><td><span class="badge text-bg-success">Confirmed</span></td></tr>
+                  <tr><td>Next week</td><td>Dr. Sarah Khan</td><td>Follow-up</td><td><span class="badge text-bg-info">Scheduled</span></td></tr>
+                </tbody></table></div>
+                <p class="small mt-3 mb-0" style="color:var(--d-muted)">Patients book into real free slots, see only records their doctor shared, and track bills — balances settle at the desk, never by a fake "paid" button.</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -603,8 +690,10 @@ h1,h2,h3,h4,h5{font-weight:700;letter-spacing:-.01em}
   "use strict";
   var shell = document.getElementById('demoShell');
   var titleEl = document.getElementById('demoTitle');
-  var titles = {overview:'Overview',patients:'Patients',doctors:'Doctors',appointments:'Appointments',wards:'Wards & Beds',pharmacy:'Pharmacy',laboratory:'Laboratory',billing:'Billing',reports:'Reports'};
+  var titles = {overview:'Overview',patients:'Patients',doctors:'Doctors',appointments:'Appointments',wards:'Wards & Beds',pharmacy:'Pharmacy',laboratory:'Laboratory',billing:'Billing',reports:'Reports',platform:'Platform Dashboard',doctorhome:'Doctor Dashboard',frontdesk:'Front Desk',portal:'My Portal'};
   var reportsChart = null;
+  var saChart = null;
+  var docChart = null;
 
   /* ---- Demo view switching ---- */
   function showView(name){
@@ -613,6 +702,80 @@ h1,h2,h3,h4,h5{font-weight:700;letter-spacing:-.01em}
     titleEl.textContent = titles[name] || 'Overview';
     shell.classList.remove('sb-open');
     if(name === 'reports' && !reportsChart){ initReportsChart(); }
+    if(name === 'platform' && !saChart){ initSaChart(); }
+    if(name === 'doctorhome' && !docChart){ initDocChart(); }
+  }
+
+  /* ---- Role panels (Upgrade v2 page trees) ---- */
+  var roleInfo = {
+    super: { home: 'platform', name: 'Platform Admin', role: 'Super Admin', initials: 'PA', heading: 'Platform' },
+    admin: { home: 'overview', name: 'Ayesha Rahman', role: 'Hospital Admin', initials: 'AR', heading: 'Hospital' },
+    doctor: { home: 'doctorhome', name: 'Dr. Sarah Khan', role: 'Doctor · Cardiology', initials: 'SK', heading: 'Doctor' },
+    receptionist: { home: 'frontdesk', name: 'Rita Verma', role: 'Receptionist', initials: 'RV', heading: 'Front Desk' },
+    patient: { home: 'portal', name: 'John Miller', role: 'Patient · PAT-0001', initials: 'JM', heading: 'My Portal' }
+  };
+  function setRole(role){
+    var info = roleInfo[role] || roleInfo.admin;
+    document.querySelectorAll('.demo-role-btn').forEach(function(b){
+      var active = b.getAttribute('data-role') === role;
+      b.classList.toggle('btn-primary', active);
+      b.classList.toggle('btn-outline-primary', !active);
+    });
+    document.querySelectorAll('.demo-side-link').forEach(function(link){
+      var roles = (link.getAttribute('data-roles') || 'admin').split(' ');
+      link.style.display = roles.indexOf(role) > -1 ? '' : 'none';
+    });
+    document.getElementById('demoSideHeading').textContent = info.heading;
+    document.getElementById('demoUserName').textContent = info.name;
+    document.getElementById('demoUserRole').textContent = info.role;
+    document.getElementById('demoUserInitials').textContent = info.initials;
+    document.getElementById('demoUserInitialsTop').textContent = info.initials;
+    showView(info.home);
+  }
+  document.querySelectorAll('.demo-role-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ setRole(btn.getAttribute('data-role')); });
+  });
+  setRole('admin');
+
+  /* ---- Live table search + status filter ---- */
+  document.querySelectorAll('.demo-table-search').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var tbody = document.getElementById(inp.getAttribute('data-target'));
+      if(!tbody) return;
+      var q = inp.value.trim().toLowerCase();
+      tbody.querySelectorAll('tr').forEach(function(tr){
+        tr.style.display = (!q || tr.textContent.toLowerCase().indexOf(q) > -1) ? '' : 'none';
+      });
+    });
+  });
+  document.querySelectorAll('.demo-status-filter').forEach(function(sel){
+    sel.addEventListener('change', function(){
+      var tbody = document.getElementById(sel.getAttribute('data-target'));
+      if(!tbody) return;
+      var s = sel.value.trim().toLowerCase();
+      tbody.querySelectorAll('tr').forEach(function(tr){
+        tr.style.display = (!s || tr.textContent.toLowerCase().indexOf(s) > -1) ? '' : 'none';
+      });
+    });
+  });
+
+  function initSaChart(){
+    if(!window.Chart) return;
+    saChart = new Chart(document.getElementById('saRevenueChart'), {
+      type: 'bar',
+      data: { labels: ['Jun','Jul','Aug','Sep','Oct','Nov'],
+        datasets: [{ label: 'Verified revenue ($)', data: [120,310,285,430,390,520], backgroundColor: 'rgba(37,99,235,.75)', borderRadius: 8 }]},
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
+    });
+  }
+  function initDocChart(){
+    if(!window.Chart) return;
+    docChart = new Chart(document.getElementById('docMonthlyChart'), {
+      type: 'bar',
+      data: { labels: ['Jun','Jul','Aug','Sep','Oct','Nov'],
+        datasets: [{ label: 'Appointments', data: [42,55,48,60,58,64], backgroundColor: 'rgba(16,185,129,.8)', borderRadius: 8 }]},
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
+    });
   }
   document.querySelectorAll('.demo-side-link').forEach(function(btn){
     btn.addEventListener('click', function(){ showView(btn.getAttribute('data-view')); });
